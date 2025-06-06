@@ -49,8 +49,17 @@ def main(args):
     # Place pawns last
     for pawn in white_pawns:
         board_object.Put_piece(pawn.row, pawn.col, pawn.representation)
+    # pawn.get_positions_available()
+    pawn.move_piece(2,7,3,7)
+    pawn.move_piece(3,7,4,7)
+    pawn.move_piece(4,7,5,7)
+
+
+    
+    # pawn.erase_x()
     for i in white_Rooks:
         i.get_positions_available()
+
     board_object.Draw_board()
 if __name__=="__main__":
     main(sys.argv)

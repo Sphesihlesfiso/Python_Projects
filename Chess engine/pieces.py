@@ -1,6 +1,8 @@
 from Chessboard import Board
-board_object = Board()
+import timer
 
+board_object = Board()
+array = board_object.array
 class Chesspiece:
     """
     This is the superclass for all chess pieces.
@@ -38,6 +40,11 @@ class Chesspiece:
         :return: str - The representation of the piece.
         """
         return self.representation
+    def erase_x(self):
+        for i in range(0,8):
+            for j in range(0,8):
+                if array[i][j]=="x":
+                    array[i][j]="x"
     def validate_move_and_move(self,postions)->bool:
         pass
     def promote_piece(self):
@@ -54,10 +61,42 @@ class Pawn(Chesspiece):
 
         :param row: The row position.
         :param col: The column position.
+        :param moved bool: To know its the first move or not
         """
+        self.moved=False
         super().__init__(row, col, representation="P")
-    def move_piece(self,row,col):
-        pass
+    def get_positions_available(self,row,col):
+        move_count=0
+        available=[]
+        if self.moved==False:
+            print("Nee Slava Russisa")
+            for i in range(3,5):
+                available.append((i,col))
+                # array[i-1][col-1]="x"
+                print(available)
+            return available
+        else:
+            if 1 <= row + 1<= 8 and 1 <= col <= 8:
+               available.append((row + 1, col))
+               print("Slava Russisa")
+            return available
+
+    def move_piece(self,row,col,next_row,next_col):
+        if array[row-1][col-1]==Pawn.return_representation(self):
+            array[row-1][col-1]=" "
+            available=Pawn.get_positions_available(self,row,col)
+           
+            if (next_row,next_col) in available:
+                print(next_row,next_col)
+
+                array[next_row-1][next_col-1]=Pawn.return_representation(self)
+                self.moved=True
+            else:
+                print(available)
+        else:
+            print(f"No piece at {row} {col}")
+        
+
 class Rook(Chesspiece):
     """
     Represents a Rook chess piece.
@@ -91,10 +130,12 @@ class Rook(Chesspiece):
 
         # Moving vertically
         for row in range(0, 8):
-            if  1 <= row <= 8 and 1 <= self.col <= 8 and array[row][self.col - 1] == " " " ":
+            if  1 <= row <= 8 and 1 <= self.col <= 8 and array[row][self.col - 1] == " ":
+                print(row,self.col-1)
                 array[row][self.col - 1] = "x"
                 available_positions.append((row, self.col - 1))
-
+            else:
+                break
         return available_positions
 
 

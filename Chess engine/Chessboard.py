@@ -26,6 +26,7 @@ class Board:
         print(" "+"+--"*8+"+")
         for i in letters:
             print("  "+str(i),end="")
+        print()
 
 
 
