@@ -30,7 +30,7 @@ def draw_game(board: list, screen, font):
 
     pygame.display.flip()
 
-def print_board(board:list,player:list)->None:
+def print_board(board:list,player:list)->str:
     """
     This function takes in an array where our game pieces will be stored while playing,
     and the player that is playing 
