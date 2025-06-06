@@ -56,8 +56,8 @@ class Pawn(Chesspiece):
         :param col: The column position.
         """
         super().__init__(row, col, representation="P")
-
-
+    def move_piece(self,row,col):
+        pass
 class Rook(Chesspiece):
     """
     Represents a Rook chess piece.

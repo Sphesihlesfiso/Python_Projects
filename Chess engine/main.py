@@ -1,7 +1,7 @@
 from Chessboard import Board
 from pieces import Rook,Pawn,board_object,Queen,Bishop,Knight,King
 import sys
-from itertools import zip_longest
+
 
 
 def create_pieces()->list:
