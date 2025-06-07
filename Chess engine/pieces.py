@@ -248,5 +248,5 @@ class Knight(Chesspiece):
         return possible_moves
 class King(Chesspiece):
     def __init__(self, row, col):
-        super().__init__(row, col, representation="K")
-#%%
+           super().__init__(row, col, representation="K")
+
