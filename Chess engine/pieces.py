@@ -25,7 +25,7 @@ class Chesspiece:
         self.col = col
         self.representation = representation
 
-    def get_positions_available(self):
+    def get_positions_available(self)->list:
         """
         Placeholder method to be implemented in subclasses.
 
@@ -33,7 +33,7 @@ class Chesspiece:
         """
         pass
 
-    def return_representation(self):
+    def return_representation(self)->str:
         """
         Returns the character representation of the chess piece.
 
@@ -44,7 +44,7 @@ class Chesspiece:
         for i in range(0,8):
             for j in range(0,8):
                 if array[i][j]=="x":
-                    array[i][j]="x"
+                    array[i][j]=" "
     def validate_move_and_move(self,postions)->bool:
         pass
     def promote_piece(self):
@@ -66,19 +66,18 @@ class Pawn(Chesspiece):
         self.moved=False
         super().__init__(row, col, representation="P")
     def get_positions_available(self,row,col):
-        move_count=0
         available=[]
         if self.moved==False:
-            print("Nee Slava Russisa")
-            for i in range(3,5):
-                available.append((i,col))
-                # array[i-1][col-1]="x"
-                print(available)
+            
+            for row in range(3,5):
+                available.append((row,col))
+                array[row-1][col-1]="x"
+                
             return available
         else:
             if 1 <= row + 1<= 8 and 1 <= col <= 8:
+               array[row][col-1]="x"
                available.append((row + 1, col))
-               print("Slava Russisa")
             return available
 
     def move_piece(self,row,col,next_row,next_col):
@@ -87,12 +86,11 @@ class Pawn(Chesspiece):
             available=Pawn.get_positions_available(self,row,col)
            
             if (next_row,next_col) in available:
-                print(next_row,next_col)
 
                 array[next_row-1][next_col-1]=Pawn.return_representation(self)
                 self.moved=True
             else:
-                print(available)
+                print("Invalid position ! Please choose a valid postion.")
         else:
             print(f"No piece at {row} {col}")
         
@@ -113,7 +111,7 @@ class Rook(Chesspiece):
         """
         super().__init__(row, col, representation="R")
 
-    def get_positions_available(self):
+    def get_positions_available(self,row,col):
         """
         Computes all valid positions the Rook can move to.
 
@@ -121,20 +119,22 @@ class Rook(Chesspiece):
         """
         available_positions = []
         array = board_object.array
-
         # Moving horizontally
-        for col in range(0, 8):
-            if array[self.row - 1][col] == " ":
-                array[self.row - 1][col] = "x"
-                available_positions.append((self.row, col))
+        for j in range(0, 8):
+            if array[row - 1][j] == " ":
+                array[row - 1][j] = "x"
+                available_positions.append((row, j))
 
         # Moving vertically
-        for row in range(0, 8):
-            if  1 <= row <= 8 and 1 <= self.col <= 8 and array[row][self.col - 1] == " ":
-                print(row,self.col-1)
-                array[row][self.col - 1] = "x"
-                available_positions.append((row, self.col - 1))
+        
+        
+        for row in range(1, 8):
+            
+            if  1 <= row <= 8 and 1 <= col <= 8 and array[row][col-1] == " ":
+                array[row][col-1 ] = "x"
+                available_positions.append((row, col))
             else:
+                print("yeeee")
                 break
         return available_positions
 
@@ -155,7 +155,7 @@ class Bishop(Chesspiece):
         """
         super().__init__(row, col, representation="B")
 
-    def diagonal_positions(self):
+    def get_positions_available(self,row,col): 
         """
         Computes all valid diagonal moves for the Bishop.
 
@@ -165,19 +165,19 @@ class Bishop(Chesspiece):
 
         # Generating diagonal moves
         for i, j in [(-1, -1), (-1, 1), (1, -1), (1, 1)]:
-            r, c = self.row + i, self.col + j
-            while 1 <= r <= 8 and 1 <= c <= 8:
-                diagonals.append((r, c))
-                r += i
-                c += j
+            row, col = self.row + i, self.col + j
+            while 1 <= row <= 8 and 1 <= col <= 8:
+                diagonals.append((row, col))
+                row += i
+                col += j
 
         array = board_object.array
 
         # Mark valid moves
 
-        for r, c in diagonals:
-            if  1 <= r <= 8 and 1 <= c <= 8 and array[r - 1][c - 1] == " ":
-                array[r - 1][c - 1] = "x"
+        for row, col in diagonals:
+            if  1 <= row <= 8 and 1 <= col <= 8 and array[row - 1][col - 1] == " ":
+                array[row - 1][col - 1] = "x"
 
 
 class Queen(Chesspiece):
@@ -227,7 +227,7 @@ class Knight(Chesspiece):
         """
         super().__init__(row, col, representation="H")
 
-    def get_positions_available(self):
+    def get_positions_available(self,row,col):
         """
         Computes all valid moves for the Knight.
 
@@ -235,18 +235,18 @@ class Knight(Chesspiece):
         """
         array = board_object.array
         possible_moves = [
-            (self.row + 2, self.col + 1), (self.row + 2, self.col - 1),
-            (self.row - 2, self.col + 1), (self.row - 2, self.col - 1),
-            (self.row + 1, self.col + 2), (self.row + 1, self.col - 2),
-            (self.row - 1, self.col + 2), (self.row - 1, self.col - 2)
+            (row + 2, col + 1), (row + 2, col - 1),
+            (row - 2, col + 1), (row - 2, col - 1),
+            (row + 1, col + 2), (row + 1, col - 2),
+            (row - 1, col + 2), (row - 1, col - 2)
         ]
-
         # Mark valid moves
-        for r, c in possible_moves:
-            if 1 <= r <= 8 and 1 <= c <= 8 and array[r - 1][c - 1] == " ":
-                array[r - 1][c - 1] = "x"
+        for row, col in possible_moves:
+            if 1 <= row <= 8 and 1 <= col <= 8 and array[row - 1][col - 1] == " ":
+                array[row - 1][col - 1] = "x"
 
         return possible_moves
 class King(Chesspiece):
     def __init__(self, row, col):
         super().__init__(row, col, representation="K")
+#%%

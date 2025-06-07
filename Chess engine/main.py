@@ -35,30 +35,26 @@ def main(args):
     # Place rooks, knights, and bishops first
     for rook in white_Rooks:
         board_object.Put_piece(rook.row, rook.col, rook.representation)
+    rook.get_positions_available(8,8)
+    # for horse in white_horses:
+    #     board_object.Put_piece(horse.row, horse.col, horse.representation)
+    # horse.get_positions_available(1,2)
+    # for bishop in white_Bishops:
+    #     board_object.Put_piece(bishop.row, bishop.col, bishop.representation)
 
-    for horse in white_horses:
-        board_object.Put_piece(horse.row, horse.col, horse.representation)
+    # # Place queen and king (only one each)
+    # board_object.Put_piece(white_Queen.row, white_Queen.col, white_Queen.representation)
+    # board_object.Put_piece(white_king.row, white_king.col, white_king.representation)
 
-    for bishop in white_Bishops:
-        board_object.Put_piece(bishop.row, bishop.col, bishop.representation)
-
-    # Place queen and king (only one each)
-    board_object.Put_piece(white_Queen.row, white_Queen.col, white_Queen.representation)
-    board_object.Put_piece(white_king.row, white_king.col, white_king.representation)
-
-    # Place pawns last
-    for pawn in white_pawns:
-        board_object.Put_piece(pawn.row, pawn.col, pawn.representation)
-    # pawn.get_positions_available()
-    pawn.move_piece(2,7,3,7)
-    pawn.move_piece(3,7,4,7)
-    pawn.move_piece(4,7,5,7)
-
-
+    # # Place pawns last
+    # for pawn in white_pawns:
+    #     board_object.Put_piece(pawn.row, pawn.col, pawn.representation)
+    #     board_object.Put_piece(-pawn.row+1, -pawn.col, pawn.representation)
     
-    # pawn.erase_x()
-    for i in white_Rooks:
-        i.get_positions_available()
+    
+    # # pawn.erase_x()
+    # for i in white_Rooks:
+    #     i.get_positions_available()
 
     board_object.Draw_board()
 if __name__=="__main__":
