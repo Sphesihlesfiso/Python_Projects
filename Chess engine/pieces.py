@@ -25,28 +25,29 @@ class Chesspiece:
         self.col = col
         self.representation = representation
 
-    def get_positions_available(self)->list:
+    def get_positions_available(self,row,col)->list:
         """
         Placeholder method to be implemented in subclasses.
 
         :return: List of valid positions the piece can move to.
         """
         pass
-
     def return_representation(self)->str:
         """
         Returns the character representation of the chess piece.
-
+  
         :return: str - The representation of the piece.
         """
         return self.representation
-    def erase_x(self):
-        for i in range(0,8):
-            for j in range(0,8):
-                if array[i][j]=="x":
-                    array[i][j]=" "
-    def validate_move_and_move(self,postions)->bool:
-        pass
+    
+    def validate_move_and_move(self,row,col)->bool:# rename to appropiate name
+        if array[row-1][col-1]==Chesspiece.return_representation(self):
+            return True
+        else:
+            print("No Chesspiece at selected position!")
+
+            return False
+
     def promote_piece(self):
         pass
     def capture_piece(self):
@@ -68,7 +69,6 @@ class Pawn(Chesspiece):
     def get_positions_available(self,row,col):
         available=[]
         if self.moved==False:
-            
             for row in range(3,5):
                 available.append((row,col))
                 array[row-1][col-1]="x"
@@ -117,26 +117,27 @@ class Rook(Chesspiece):
 
         :return: List of tuples representing valid positions (row, col).
         """
+        # if super().validate_move_and_move(row,col):
         available_positions = []
         array = board_object.array
         # Moving horizontally
+    # Moving horizontally
         for j in range(0, 8):
-            if array[row - 1][j] == " ":
+            print(row, j)
+            if 0 <= row <= 8 and 0 <= j <= 8 and array[row - 1][j] == " ":
                 array[row - 1][j] = "x"
                 available_positions.append((row, j))
 
         # Moving vertically
-        
-        
-        for row in range(1, 8):
-            
-            if  1 <= row <= 8 and 1 <= col <= 8 and array[row][col-1] == " ":
+        for row in range(0, 8):
+            print(row,    col)
+            if 0 <= row <= 8 and 0 <= col <= 8 and array[row][col-1] == " ":
                 array[row][col-1 ] = "x"
                 available_positions.append((row, col))
             else:
-                print("yeeee")
-                break
-        return available_positions
+                print("yeah")
+
+            
 
 
 class Bishop(Chesspiece):
@@ -165,19 +166,18 @@ class Bishop(Chesspiece):
 
         # Generating diagonal moves
         for i, j in [(-1, -1), (-1, 1), (1, -1), (1, 1)]:
-            row, col = self.row + i, self.col + j
-            while 1 <= row <= 8 and 1 <= col <= 8:
-                diagonals.append((row, col))
-                row += i
-                col += j
-
-        array = board_object.array
+            r, c = row + i, col + j  # use temp vars to not overwrite input
+            while 0 <= r <= 8 and 0 <= c <= 8:
+                diagonals.append((r, c))
+                r += i
+                c += j
 
         # Mark valid moves
-
-        for row, col in diagonals:
-            if  1 <= row <= 8 and 1 <= col <= 8 and array[row - 1][col - 1] == " ":
-                array[row - 1][col - 1] = "x"
+        for r, c in diagonals:
+            if array[r-1][c-1] == " " and 0 <= r-1 <= 8 and 0 <= c-1 <= 8:
+                array[r-1][c-1] = "x"
+            else:
+                pass
 
 
 class Queen(Chesspiece):
@@ -198,7 +198,7 @@ class Queen(Chesspiece):
         self.diagonal_movement = Bishop(self.row, self.col)
         self.horizontal_vertical = Rook(self.row, self.col)
 
-    def diagonal_vertical_horizontal_positions(self):
+    def get_positions_available(self,row,col):
         """
         Computes all valid moves for the Queen (both diagonal and straight-line moves).
 
@@ -208,8 +208,8 @@ class Queen(Chesspiece):
         # possible_moves=[self.diagonal_movement.diagonal_positions() + self.horizontal_vertical.get_positions_available()]
         
         
-        self.diagonal_movement = self.diagonal_movement.diagonal_positions()
-        self.horizontal_vertical = self.horizontal_vertical.get_positions_available()
+        self.diagonal_movement = self.diagonal_movement.get_positions_available(row,col)
+        self.horizontal_vertical = self.horizontal_vertical.get_positions_available(row,col)
         
 class Knight(Chesspiece):
     """

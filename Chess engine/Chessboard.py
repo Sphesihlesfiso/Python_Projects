@@ -10,6 +10,11 @@ class Board:
     def Put_piece(self,i,j,piece):
         
         self.array[i-1][j-1]=piece
+    def erase_x(self):
+        for i in range(0,8):
+            for j in range(0,8):
+                if self.array[i][j]=="x":
+                    self.array[i][j]=" "
     def Draw_board(self):
         letters=['a','b','c','d','e','f','g','h']
         for i in letters:

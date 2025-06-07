@@ -13,10 +13,10 @@ def create_pieces()->list:
     white_Rook1=Rook(1,1)
     white_Rook2=Rook(1,8)
     white_Bishop1=Bishop(1,3)
-    white_Bishop2=Bishop(1,6)
+    white_Bishop2=Bishop(1,7)
     white_horse1=Knight(1,2)
     white_horse2=Knight(1,7)
-    white_Queen=Queen(1,5)
+    white_Queen=Queen(5,5)
     white_king=King(1,4)
     for i in range(8):
         white_pawn=Pawn(2,i)
@@ -35,17 +35,17 @@ def main(args):
     # Place rooks, knights, and bishops first
     for rook in white_Rooks:
         board_object.Put_piece(rook.row, rook.col, rook.representation)
-    rook.get_positions_available(8,8)
+    # rook.get_positions_available(2,3)
     # for horse in white_horses:
     #     board_object.Put_piece(horse.row, horse.col, horse.representation)
     # horse.get_positions_available(1,2)
     # for bishop in white_Bishops:
     #     board_object.Put_piece(bishop.row, bishop.col, bishop.representation)
-
+    
     # # Place queen and king (only one each)
-    # board_object.Put_piece(white_Queen.row, white_Queen.col, white_Queen.representation)
+    board_object.Put_piece(white_Queen.row, white_Queen.col, white_Queen.representation)
     # board_object.Put_piece(white_king.row, white_king.col, white_king.representation)
-
+    white_Queen.get_positions_available(5,5)
     # # Place pawns last
     # for pawn in white_pawns:
     #     board_object.Put_piece(pawn.row, pawn.col, pawn.representation)
