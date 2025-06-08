@@ -4,49 +4,73 @@ import sys
 
 
 
-def create_pieces()->list:
-    white_Rooks=[]
-    white_pawns=[]
-    white_horses=[]
-    white_pawns=[]
-    white_Bishops=[]
-    white_Rook1=Rook(1,1)
-    white_Rook2=Rook(1,8)
-    white_Bishop1=Bishop(1,3)
-    white_Bishop2=Bishop(1,6)
-    white_horse1=Knight(1,2)
-    white_horse2=Knight(1,7)
-    white_Queen=Queen(1,5)
-    white_king=King(1,4)
+def create_pieces() -> list:
+    rooks = []
+    bishops = []
+    knights = []
+    queens = []
+    kings = []
+    pawns = []
+
+    # Rooks
+    rooks.append(Rook(1, 1, "white"))
+    rooks.append(Rook(1, 8, "white"))
+    rooks.append(Rook(8, 1, "black"))
+    rooks.append(Rook(8, 8, "black"))
+
+    # Bishops
+    bishops.append(Bishop(1, 3, "white"))
+    bishops.append(Bishop(1, 6, "white"))
+    bishops.append(Bishop(8, 3, "black"))
+    bishops.append(Bishop(8, 6, "black"))
+
+    # Knights
+    knights.append(Knight(1, 2, "white"))
+    knights.append(Knight(1, 7, "white"))
+    knights.append(Knight(8, 2, "black"))
+    knights.append(Knight(8, 7, "black"))
+
+    # Queens
+    queens.append(Queen(1, 5, "white"))
+    queens.append(Queen(8, 5, "black"))
+
+    # Kings
+    kings.append(King(1, 4, "white"))
+    kings.append(King(8, 4, "black"))
+
+    # Pawns
     for i in range(8):
-        white_pawn=Pawn(2,i)
-        white_pawns.append(white_pawn)
-    white_Bishops.append(white_Bishop1)
-    white_Bishops.append(white_Bishop2)
-    white_Rooks.append(white_Rook1)
-    white_Rooks.append(white_Rook2)
-    white_horses.append(white_horse1)
-    white_horses.append(white_horse2)
-    return white_Rooks,white_horses,white_Bishops,white_Queen,white_king,white_pawns
-def get_user_input():
-    pass
+        pawns.append(Pawn(7, i + 1, "black"))  # white pawns
+        pawns.append(Pawn(2, i + 1, "white"))  # black pawns
+
+    return rooks, knights, bishops, queens, kings, pawns
 def main(args):
-    white_Rooks,white_horses,white_Bishops,white_Queen,white_king,white_pawns=create_pieces()
-    # Place rooks, knights, and bishops first
-    for rook in white_Rooks:
+    rooks, knights, bishops, queens, kings, pawns = create_pieces()
+    # You can now handle each type separately, using their color attribute when needed.
+
+    for rook in rooks:
         board_object.Put_piece(rook.row, rook.col, rook.representation)
-   
-    for horse in white_horses:
-        board_object.Put_piece(horse.row, horse.col, horse.representation)
-    for bishop in white_Bishops:
+
+# Place knights
+    for knight in knights:
+        board_object.Put_piece(knight.row, knight.col, knight.representation)
+
+    # Place bishops
+    for bishop in bishops:
         board_object.Put_piece(bishop.row, bishop.col, bishop.representation)
-    
-    # # Place queen and king (only one each)
-    board_object.Put_piece(white_Queen.row, white_Queen.col, white_Queen.representation)
-    board_object.Put_piece(white_king.row, white_king.col, white_king.representation)
-    # Place pawns last
-    for pawn in white_pawns:
+
+    # Place queens
+    for queen in queens:
+        board_object.Put_piece(queen.row, queen.col, queen.representation)
+
+    # Place kings
+    for king in kings:
+        board_object.Put_piece(king.row, king.col, king.representation)
+
+    # Place pawns
+    for pawn in pawns:
         board_object.Put_piece(pawn.row, pawn.col, pawn.representation)
+    pawn.get_positions_available(2,5)
     
 
     board_object.Draw_board()

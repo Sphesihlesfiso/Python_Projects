@@ -13,7 +13,7 @@ class Chesspiece:
         representation (str): The character representing the piece on the board.
     """
 
-    def __init__(self, row: int, col: int, representation: str):
+    def __init__(self, row: int, col: int, representation: str,color:str):
         """
         Initializes a chess piece with its position and representation.
 
@@ -23,7 +23,8 @@ class Chesspiece:
         """
         self.row = row
         self.col = col
-        self.representation = representation
+        self.representation = representation if color=="white" else representation.lower()
+        self.color=color
 
     def get_positions_available(self,row,col)->list:
         """
@@ -56,7 +57,7 @@ class Pawn(Chesspiece):
     """
     Represents a Pawn chess piece.
     """
-    def __init__(self, row: int, col: int):
+    def __init__(self, row: int, col: int,color):
         """
         Initializes a Pawn piece.
 
@@ -65,7 +66,8 @@ class Pawn(Chesspiece):
         :param moved bool: To know its the first move or not
         """
         self.moved=False
-        super().__init__(row, col, representation="P")
+        
+        super().__init__(row, col, representation="P",color=color)
     def get_positions_available(self,row,col):
         available=[]
         if self.moved==False:
@@ -102,14 +104,14 @@ class Rook(Chesspiece):
     The Rook moves vertically and horizontally without limitations.
     """
 
-    def __init__(self, row: int, col: int):
+    def __init__(self, row: int, col: int,color):
         """
         Initializes a Rook piece.
 
         :param row: The row position.
         :param col: The column position.
         """
-        super().__init__(row, col, representation="R")
+        super().__init__(row, col, representation="R",color=color)
 
     def get_positions_available(self,row,col):
         """
@@ -147,14 +149,15 @@ class Bishop(Chesspiece):
     The Bishop moves diagonally in any direction.
     """
 
-    def __init__(self, row: int, col: int):
+    def __init__(self, row: int, col: int,color):
         """
         Initializes a Bishop piece.
 
         :param row: The row position.
         :param col: The column position.
         """
-        super().__init__(row, col, representation="B")
+        self.color=color
+        super().__init__(row, col, representation="B",color=color)
 
     def get_positions_available(self,row,col): 
         """
@@ -187,16 +190,17 @@ class Queen(Chesspiece):
     The Queen moves like both a Rook and a Bishop.
     """
 
-    def __init__(self, row: int, col: int):
+    def __init__(self, row: int, col: int,color):
         """
         Initializes a Queen piece.
 
         :param row: The row position.
         :param col: The column position.
         """
-        super().__init__(row, col, representation="Q")
-        self.diagonal_movement = Bishop(self.row, self.col)
-        self.horizontal_vertical = Rook(self.row, self.col)
+        
+        super().__init__(row, col, representation="Q",color=color)
+        self.diagonal_movement = Bishop(self.row, self.col,color=color)
+        self.horizontal_vertical = Rook(self.row, self.col,color=color)
 
     def get_positions_available(self,row,col):
         """
@@ -218,14 +222,15 @@ class Knight(Chesspiece):
     The Knight moves in an 'L' shape: two squares in one direction, then one square perpendicular.
     """
 
-    def __init__(self, row: int, col: int):
+    def __init__(self, row: int, col: int,color):
         """
         Initializes a Knight piece.
 
         :param row: The row position.
         :param col: The column position.
         """
-        super().__init__(row, col, representation="H")
+        self.color=color
+        super().__init__(row, col, representation="H",color=color)
 
     def get_positions_available(self,row,col):
         """
@@ -247,6 +252,6 @@ class Knight(Chesspiece):
 
         return possible_moves
 class King(Chesspiece):
-    def __init__(self, row, col):
-           super().__init__(row, col, representation="K")
+    def __init__(self, row, col,color):
+           super().__init__(row, col, representation="K",color=color)
 
