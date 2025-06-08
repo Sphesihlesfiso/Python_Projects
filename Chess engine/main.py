@@ -70,7 +70,8 @@ def main(args):
     # Place pawns
     for pawn in pawns:
         board_object.Put_piece(pawn.row, pawn.col, pawn.representation)
-    pawn.get_positions_available(2,5)
+    pawn.get_positions_available(7,4)
+    
     
 
     board_object.Draw_board()

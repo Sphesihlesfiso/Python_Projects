@@ -68,33 +68,41 @@ class Pawn(Chesspiece):
         self.moved=False
         
         super().__init__(row, col, representation="P",color=color)
-    def get_positions_available(self,row,col):
-        available=[]
-        if self.moved==False:
-            for row in range(3,5):
-                available.append((row,col))
-                array[row-1][col-1]="x"
-                
-            return available
+    def get_positions_available(self, row, col):
+        available = []
+
+        direction = -1 if self.color == "white" else 1  # white moves up (row decreases), black moves down (row increases)
+
+        if not self.moved:
+            # Initial 2-step move
+            for step in range(1, 3):
+                next_row = row + step * direction
+                if 1 <= next_row <= 8:
+                    available.append((next_row, col))
+                    array[next_row - 1][col - 1] = "x"
         else:
-            if 1 <= row + 1<= 8 and 1 <= col <= 8:
-               array[row][col-1]="x"
-               available.append((row + 1, col))
-            return available
+            next_row = row + direction
+            if 1 <= next_row <= 8:
+                available.append((next_row, col))
+                array[next_row - 1][col - 1] = "x"
 
-    def move_piece(self,row,col,next_row,next_col):
-        if array[row-1][col-1]==Pawn.return_representation(self):
-            array[row-1][col-1]=" "
-            available=Pawn.get_positions_available(self,row,col)
-           
-            if (next_row,next_col) in available:
+        return available
+    def move_piece(self, row, col, next_row, next_col):
+        if array[row - 1][col - 1] == self.return_representation():
+            available = self.get_positions_available(row, col)
 
-                array[next_row-1][next_col-1]=Pawn.return_representation(self)
-                self.moved=True
+            if (next_row, next_col) in available:
+                array[row - 1][col - 1] = " "
+                array[next_row - 1][next_col - 1] = self.return_representation()
+                self.row = next_row  # Update the pawn's position
+                self.col = next_col
+                self.moved = True
             else:
-                print("Invalid position ! Please choose a valid postion.")
+                print("Invalid position! Please choose a valid position.")
         else:
             print(f"No piece at {row} {col}")
+
+
         
 
 class Rook(Chesspiece):
