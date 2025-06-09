@@ -67,9 +67,8 @@ def main(args):
     # Place pawns
     for pawn in pawns:
         board_object.Put_piece(pawn.row, pawn.col, pawn.representation)
-        pawn.color
-    pawn.get_positions_available(7,3)
-    pawn.move_piece(7,3,6,3)
+    pawn.get_positions_available(5,3)
+    # pawn.move_piece(7,3,6,3)
     
     
 

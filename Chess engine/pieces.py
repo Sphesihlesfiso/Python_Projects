@@ -71,7 +71,7 @@ class Pawn(Chesspiece):
     def get_positions_available(self, row, col):
         available = []
 
-        direction = -1 if self.color == "white" else -1  # white moves up (row decreases), black moves down (row increases)
+        direction = 1 if self.color == "white" else -1 # white moves up (row decreases), black moves down (row increases)
         print(self.color)
         print(direction)
         if not self.moved:
@@ -80,19 +80,19 @@ class Pawn(Chesspiece):
                 next_row = row + step * direction
                 if 1 <= next_row <= 8:
                     available.append((next_row, col))
-                    array[next_row - 1][col - 1] = "x"
+                    array[next_row - 1][col - 1] = "z"
         else:
-            next_row = row + direction
+            next_row = row+direction
             if 1 <= next_row <= 8:
                 available.append((next_row, col))
-                array[next_row - 1][col - 1] = "x"
-
+                array[next_row - 1][col -1]="z"
+        print(available)
         return available
     def move_piece(self, row, col, next_row, next_col):
-        if array[row - 1][col - 1] == self.return_representation():
+        if array[row - 1][col - 1] == self.representation:
             available = self.get_positions_available(row, col)
             board_object.erase_x()
-            print(available)
+            print(self.color)
             if (next_row, next_col) in available:
                 array[row-1 ][col-1] = " "
                 array[next_row-1 ][next_col-1] = self.representation
