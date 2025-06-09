@@ -1,9 +1,6 @@
 from Chessboard import Board
 from pieces import Rook,Pawn,board_object,Queen,Bishop,Knight,King
 import sys
-
-
-
 def create_pieces() -> list:
     rooks = []
     bishops = []
@@ -70,7 +67,9 @@ def main(args):
     # Place pawns
     for pawn in pawns:
         board_object.Put_piece(pawn.row, pawn.col, pawn.representation)
-    pawn.get_positions_available(7,4)
+        pawn.color
+    pawn.get_positions_available(7,3)
+    pawn.move_piece(7,3,6,3)
     
     
 

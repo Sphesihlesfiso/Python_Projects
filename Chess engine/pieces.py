@@ -71,8 +71,9 @@ class Pawn(Chesspiece):
     def get_positions_available(self, row, col):
         available = []
 
-        direction = -1 if self.color == "white" else 1  # white moves up (row decreases), black moves down (row increases)
-
+        direction = -1 if self.color == "white" else -1  # white moves up (row decreases), black moves down (row increases)
+        print(self.color)
+        print(direction)
         if not self.moved:
             # Initial 2-step move
             for step in range(1, 3):
@@ -90,12 +91,14 @@ class Pawn(Chesspiece):
     def move_piece(self, row, col, next_row, next_col):
         if array[row - 1][col - 1] == self.return_representation():
             available = self.get_positions_available(row, col)
-
+            board_object.erase_x()
+            print(available)
             if (next_row, next_col) in available:
-                array[row - 1][col - 1] = " "
-                array[next_row - 1][next_col - 1] = self.return_representation()
+                array[row-1 ][col-1] = " "
+                array[next_row-1 ][next_col-1] = self.representation
                 self.row = next_row  # Update the pawn's position
                 self.col = next_col
+                print(self.row,self.col)
                 self.moved = True
             else:
                 print("Invalid position! Please choose a valid position.")
