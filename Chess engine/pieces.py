@@ -71,7 +71,7 @@ class Pawn(Chesspiece):
     def get_positions_available(self, row, col):
         available = []
 
-        direction = -1 if self.color == "white" else -1 # white moves up (row decreases), black moves down (row increases)
+        direction = 1 if self.color == "white" else -1 # white moves up (row decreases), black moves down (row increases)
         print(self.color)
         print(direction)
         if not self.moved:
