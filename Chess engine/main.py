@@ -67,10 +67,14 @@ def main(args):
     # Place pawns
     for pawn in pawns:
         board_object.Put_piece(pawn.row, pawn.col, pawn.representation)
-        print(pawn.color,pawn.row, pawn.col)
-    print(pawn.get_positions_available(2,3))
-    pawn.move_piece(7,3,6,3)
+        print(pawn.color,pawn.row,pawn.col)
+    print(pawn.get_positions_available(7,1))
+    
+    print(pawn.color)
+    #pawn.move_piece(2,3,4,3)
+    board_object.erase_x()
     board_object.Draw_board()
 if __name__=="__main__":
     main(sys.argv)
-   
+
+

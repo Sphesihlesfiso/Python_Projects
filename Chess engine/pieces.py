@@ -58,7 +58,7 @@ class Pawn(Chesspiece):
     """
     Represents a Pawn chess piece.
     """
-    def __init__(self, row: int, col: int,color):
+    def __init__(self, row: int, col:int,color:str):
         """
         Initializes a Pawn piece.
 
@@ -67,13 +67,11 @@ class Pawn(Chesspiece):
         :param moved bool: To know its the first move or not
         """
         self.moved=False
-        super().__init__(row, col, representation='P',color=color)
+        super().__init__(row, col, representation ="P",color=color)
     def get_positions_available(self, row, col):
         available = []
 
         direction = 1 if self.color == "white" else -1 # white moves up (row decreases), black moves down (row increases)
-        print(self.color)
-        print(direction)
         if not self.moved:
             i, j = (1, 3) if self.color == "white" else (6, 8)
 
@@ -91,6 +89,11 @@ class Pawn(Chesspiece):
         print(available)
         return available
     def move_piece(self, row, col, next_row, next_col):
+        if self.row >5 :
+            color="black"
+            exit()
+        else:
+            color=color
         print(self.representation)
         if array[row - 1][col - 1] == self.representation:
             available = self.get_positions_available(row, col)
@@ -143,7 +146,6 @@ class Rook(Chesspiece):
             if 0 <= row <= 8 and 0 <= j <= 8 and array[row - 1][j] == " ":
                 array[row - 1][j] = "x"
                 available_positions.append((row, j))
-
         # Moving vertically
         for row in range(0, 8):
             print(row,    col)
