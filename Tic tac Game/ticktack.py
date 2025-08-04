@@ -1,3 +1,26 @@
+class Chesspiece:
+    """
+    This is the superclass for all chess pieces.
+
+    Attributes:
+        row (int): The row position of the chess piece (1-indexed).
+        col (int): The column position of the chess piece (1-indexed).
+        representation (str): The character representing the piece on the board.
+    """
+
+    def __init__(self, row: int, col: int, representation: str,color:str):
+        """
+        Initializes a chess piece with its position and representation.
+
+        :param row: The row position (1-indexed).
+        :param col: The column position (1-indexed).
+        :param representation: The visual representation of the piece.
+        """
+        self.row = row
+        self.col = col
+        self.color=color
+        self.representation = representation if color=="white" else representation.lower()
+        
 """
 This is a tick tack game played by two players .
 The one who can get their 3 makers X or O horizontaly verticaly or diagonally wins!

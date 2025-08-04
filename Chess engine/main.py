@@ -37,8 +37,8 @@ def create_pieces() -> list:
 
     # Pawns
     for i in range(8):
-        pawns.append(Pawn(7, i + 1, "black"))  # white pawns
-        pawns.append(Pawn(2, i + 1, "white"))  # black pawns
+        pawns.append(Pawn(7, i + 1, "black","P"))  # white pawns
+        pawns.append(Pawn(2, i + 1, "white","p"))  # black pawns
 
     return rooks, knights, bishops, queens, kings, pawns
 def main(args):
@@ -67,11 +67,11 @@ def main(args):
     # Place pawns
     for pawn in pawns:
         board_object.Put_piece(pawn.row, pawn.col, pawn.representation)
-        print(pawn.color,pawn.row,pawn.col)
-    print(pawn.get_positions_available(7,1))
     
-    print(pawn.color)
-    #pawn.move_piece(2,3,4,3)
+    print(pawn.get_positions_available(7,1,"black"))
+    
+    
+    pawn.move_piece(7,1,5,1,"black")
     board_object.erase_x()
     board_object.Draw_board()
 if __name__=="__main__":

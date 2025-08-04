@@ -58,7 +58,7 @@ class Pawn(Chesspiece):
     """
     Represents a Pawn chess piece.
     """
-    def __init__(self, row: int, col:int,color:str):
+    def __init__(self, row: int, col:int,color:str,representation):
         """
         Initializes a Pawn piece.
 
@@ -67,11 +67,14 @@ class Pawn(Chesspiece):
         :param moved bool: To know its the first move or not
         """
         self.moved=False
-        super().__init__(row, col, representation ="P",color=color)
-    def get_positions_available(self, row, col):
+        self.color=color
+        
+        super().__init__(row, col, representation,color )
+    def get_positions_available(self, row, col,color):
         available = []
 
-        direction = 1 if self.color == "white" else -1 # white moves up (row decreases), black moves down (row increases)
+        direction = 1 if color == "white" else -1 # white moves up (row decreases), black moves down (row increases)
+        print(self.color)
         if not self.moved:
             i, j = (1, 3) if self.color == "white" else (6, 8)
 
@@ -80,23 +83,18 @@ class Pawn(Chesspiece):
                 next_row = row + step * direction
                 if 1 <= next_row <= 8:
                     available.append((next_row, col))
-                    array[next_row - 1][col - 1] = "z"
+                    array[next_row - 1][col - 1] = "x"
         else:
             next_row = row+direction
             if 1 <= next_row <= 8:
                 available.append((next_row, col))
-                array[next_row - 1][col -1]="z"
+                array[next_row - 1][col -1]="x"
         print(available)
         return available
-    def move_piece(self, row, col, next_row, next_col):
-        if self.row >5 :
-            color="black"
-            exit()
-        else:
-            color=color
+    def move_piece(self, row, col, next_row, next_col,color):
         print(self.representation)
         if array[row - 1][col - 1] == self.representation:
-            available = self.get_positions_available(row, col)
+            available = self.get_positions_available(row, col,color)
             board_object.erase_x()
             print(self.color)
             if (next_row, next_col) in available:
