@@ -28,6 +28,14 @@ app.get('/account', (req, res) => {
 app.post('/login', (req, res) => {
   res.render("account")
 });
+app.get('/admin', (req, res) => {
+  res.render("admindashboard")
+});
+app.post('/admin', (req, res) => {
+  const nameofBag=req.body["Nameofbag"]
+  console.log(nameofBag)
+  res.render("admindashboard")
+});
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });
