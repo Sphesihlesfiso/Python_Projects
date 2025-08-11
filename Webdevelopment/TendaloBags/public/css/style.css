@@ -25,10 +25,10 @@ footer {
   vertical-align: middle;
 }
 .nav-link svg {
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
 }
 .nav-link:hover svg {
-  transform: scale(1.3);
+  transform: scale(1.0001);
 }
 .card {
   /* Example styles */
