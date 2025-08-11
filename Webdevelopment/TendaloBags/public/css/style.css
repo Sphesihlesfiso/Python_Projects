@@ -40,3 +40,39 @@ footer {
 .card:hover {
   transform: scale(1.25);
 }
+.basket-item {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.image-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Basketpicture {
+  width: 120px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.button-group {
+  margin-top: 12px;
+  display: inline;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.item-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+.plus ,.del,.delete{
+  border-radius: 15px;
+}

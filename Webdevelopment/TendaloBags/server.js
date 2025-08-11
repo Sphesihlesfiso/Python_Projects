@@ -51,14 +51,14 @@ app.get('/about',async (req, res) => {
 app.get('/login', (req, res) => {
   res.render('login');
 });
-app.get('/sign-up', (req, res) => {
-  res.render('sign-up');
+app.get('/register', (req, res) => {
+  res.render('register');
 });
 app.get('/cart', (req, res) => {
   res.render('cart');
 });
-app.get('/account', (req, res) => {
-  res.render('sign-up');
+app.post('/register', (req, res) => {
+  res.render('register');
 });
 app.post('/login', (req, res) => {
   res.render("account")
@@ -66,7 +66,7 @@ app.post('/login', (req, res) => {
 app.get('/admin', (req, res) => {
   res.render("admindashboard")
 });
-app.get('/login/sign-up', (req, res) => {
+app.get('/login/register', (req, res) => {
   res.render("joter")
 });
 app.post('/admin', (req, res) => {

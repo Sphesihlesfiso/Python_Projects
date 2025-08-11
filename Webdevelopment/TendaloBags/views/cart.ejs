@@ -17,9 +17,77 @@
 
     <link href="css/style.css" rel="stylesheet" />
   </head>
-  <%- include("partials/header") %>
+
   <body>
-    <h1>Items brought will show up here.</h1>
+    <%- include("partials/header") %> <% const Basket = [ { name: 'Newcastle Mountains Daypack', price: 750, image: 'Newcastle_mountains.png', inStock:
+    true }, { name: 'Snow Trek Backpack', price: 900, image: 'snow.png',
+    inStock: false }, { name: 'Plan Visit Duffel',
+    price: 799, image: 'planvisit.webp', inStock: true }, { name: 'Local Schools Sling', price: 699, image: 'schools.webp', inStock: false }, { name:
+    'EcoEvents Bag', price: 649, image: 'events.webp', inStock: true }, {
+    name:'Hotel Explorer Pack', price: 849, image: 'hotel.jpg', inStock: true },
+    { name: 'Hiking Trail Bag', price: 799, image: 'hiking.jpg', inStock: false
+    }, { name: 'VN Logo Pouch', price: 399, image: 'VN.png', inStock: true }, {
+    name: 'Facebook Icon Bag', price: 299, image: 'facebook.svg', inStock: true
+    }, { name: 'Instagram Icon Bag', price: 299, image: 'instagram.svg',
+    inStock: false } ]; %>
+
+    <section class="container mx-10 my-5">
+      <% Basket.forEach(bag => { %>
+      <div class="basket-item">
+        <div class="image-column">
+          <img
+            class="Basketpicture"
+            src="/images/<%= bag.image %>"
+            alt="<%= bag.name %>"
+          />
+
+          <div class="button-group mx-3 my-3">
+            <button class="del">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-dash-lg"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8"
+                />
+              </svg>
+            </button>
+
+            <span>1</span>
+
+            <button class="plus">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-plus"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"
+                />
+              </svg>
+            </button>
+
+            <button class="delete">Delete</button>
+          </div>
+        </div>
+
+        <div class="item-details">
+          <h5><%= bag.name %></h5>
+          <h5>R<%= bag.price %></h5>
+          <h5><%= bag.inStock ? "In stock" : "Out of stock" %></h5>
+        </div>
+      </div>
+      <% }) %><br><hr>
+    </section>
     <%- include("partials/footer") %>
+    <script src="/js/main.js"></script>
   </body>
 </html>
