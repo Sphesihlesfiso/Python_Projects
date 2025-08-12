@@ -14,80 +14,138 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
     />
-
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
     <link href="css/style.css" rel="stylesheet" />
   </head>
 
   <body>
     <%- include("partials/header") %> <% const Basket = [ { name: 'Newcastle Mountains Daypack', price: 750, image: 'Newcastle_mountains.png', inStock:
     true }, { name: 'Snow Trek Backpack', price: 900, image: 'snow.png',
-    inStock: false }, { name: 'Plan Visit Duffel',
-    price: 799, image: 'planvisit.webp', inStock: true }, { name: 'Local Schools Sling', price: 699, image: 'schools.webp', inStock: false }, { name:
-    'EcoEvents Bag', price: 649, image: 'events.webp', inStock: true }, {
-    name:'Hotel Explorer Pack', price: 849, image: 'hotel.jpg', inStock: true },
-    { name: 'Hiking Trail Bag', price: 799, image: 'hiking.jpg', inStock: false
-    }, { name: 'VN Logo Pouch', price: 399, image: 'VN.png', inStock: true }, {
-    name: 'Facebook Icon Bag', price: 299, image: 'facebook.svg', inStock: true
-    }, { name: 'Instagram Icon Bag', price: 299, image: 'instagram.svg',
-    inStock: false } ]; %>
+    inStock: false }, { name: 'Plan Visit Duffel', price: 799, image:
+    'planvisit.webp', inStock: true }, { name: 'Local Schools Sling', price:
+    699, image: 'schools.webp', inStock: false }, { name: 'EcoEvents Bag',
+    price: 649, image: 'events.webp', inStock: true }, { name:'Hotel Explorer Pack', price: 849, image: 'hotel.jpg', inStock: true }, { name: 'HikingTrail Bag', price: 799, image: 'hiking.jpg', inStock: false }, { name:
+    'VNLogo Pouch', price: 399, image: 'VN.png', inStock: true }, { name:
+    'Facebook Icon Bag', price: 299, image: 'facebook.svg', inStock: true }, {
+    name:'Instagram Icon Bag', price: 299, image: 'instagram.svg', inStock:
+    false }]; %>
 
-    <section class="container mx-10 my-5">
-      <% Basket.forEach(bag => { %>
-      <div class="basket-item">
-        <div class="image-column">
-          <img
-            class="Basketpicture"
-            src="/images/<%= bag.image %>"
-            alt="<%= bag.name %>"
-          />
+    <div class="cart-wrapper">
+      <div class="container">
+        <div class="row g-4">
+          <!-- Cart Items Section -->
+          <div class="col-lg-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h4 class="mb-0">Shopping Cart</h4>
+              <span class="text-muted"><%= Basket.length %></span>
+            </div>
 
-          <div class="button-group mx-3 my-3">
-            <button class="del">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-dash-lg"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8"
-                />
-              </svg>
-            </button>
+            <!-- Product Cards -->
+            <div class="d-flex flex-column gap-3">
+              <!-- Product 1 -->
+              <% Basket.forEach(bag => { %>
+              <div class="product-card p-3 shadow-sm">
+                <div class="row align-items-center">
+                  <div class="col-md-2">
+                    <img
+                      src="/images/<%= bag.image %>"
+                      alt="<%= bag.name %>"
+                      class="product-image"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <p class="text-muted mb-0"><%= bag.name %></p>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="d-flex align-items-center gap-2">
+                      <button
+                        class="quantity-btn"
+                        onclick="updateQuantity(2, -1)"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        class="quantity-input"
+                        value="1"
+                        min="1"
+                      />
+                      <button
+                        class="quantity-btn"
+                        onclick="updateQuantity(2, 1)"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <span class="fw-bold">$<%= bag.price %></span>
+                  </div>
+                  <div class="col-md-1">
+                    <i class="bi bi-trash remove-btn"></i>
+                  </div>
+                </div>
+              </div>
+              <% }) %>
+            </div>
+            <div class="col-lg-12 mt-2">
+            <div class="summary-card p-4 shadow-sm">
+              <h5 class="mb-4">Order Summary</h5>
 
-            <span>1</span>
+              <div class="d-flex justify-content-between mb-3">
+                <span class="text-muted">Subtotal</span>
+                <span>$479.97</span>
+              </div>
+              <div class="d-flex justify-content-between mb-3">
+                <span class="text-muted">Discount</span>
+                <span class="text-success">-$26.00</span>
+              </div>
+              <div class="d-flex justify-content-between mb-3">
+                <span class="text-muted">Shipping</span>
+                <span>$5.00</span>
+              </div>
+              <hr />
+              <div class="d-flex justify-content-between mb-4">
+                <span class="fw-bold">Total</span>
+                <span class="fw-bold">$458.97</span>
+              </div>
 
-            <button class="plus">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-plus"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"
-                />
-              </svg>
-            </button>
+              <button class="btn btn-primary checkout-btn w-100 mb-3">
+                Proceed to Checkout
+              </button>
 
-            <button class="delete">Delete</button>
+              <div class="d-flex justify-content-center mx-2 my-2 gap-2">
+                <i class="bi bi-shield-check text-success"></i>
+                <small class="text-muted">Secure checkout</small>
+              </div>
+            </div>
           </div>
+          </div>
+          
         </div>
 
-        <div class="item-details">
-          <h5><%= bag.name %></h5>
-          <h5>R<%= bag.price %></h5>
-          <h5><%= bag.inStock ? "In stock" : "Out of stock" %></h5>
-        </div>
+      
       </div>
-      <% }) %><br><hr>
-    </section>
-    <%- include("partials/footer") %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      function updateQuantity(productId, change) {
+        const input =
+          event.target.parentElement.querySelector(".quantity-input");
+        let value = parseInt(input.value) + change;
+        if (value >= 1) {
+          input.value = value;
+        }
+      }
+    </script>
     <script src="/js/main.js"></script>
   </body>
 </html>

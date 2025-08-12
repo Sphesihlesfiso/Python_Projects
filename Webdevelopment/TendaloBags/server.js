@@ -1,9 +1,14 @@
 import express from "express";
 import axios from "axios";
 import pg from "pg";
-
+import https from 'https';
+import fs from 'fs';
+const options = {
+  key: fs.readFileSync('./ssl/private.key'),
+  cert: fs.readFileSync('./ssl/certificate.crt')
+};
 const app = express();
-const port = 3000;
+const port = 443;
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
@@ -74,6 +79,6 @@ app.post('/admin', (req, res) => {
   console.log(nameofBag)
   res.render("admindashboard")
 });
-app.listen(port, () => {
-  console.log(`Server running on port: ${port}`);
+https.createServer(options, app).listen(port, () => {
+  console.log(`Secure server running on https://localhost ${port}`);
 });
