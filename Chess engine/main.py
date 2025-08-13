@@ -16,7 +16,7 @@ pygame.init()
 
 # --- CONSTANTS ---
 # Screen dimensions
-SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 800
+SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 700
 # Board dimensions
 BOARD_SIZE_PX = 600
 BOARD_SIZE = 8
@@ -44,9 +44,35 @@ FONT = pygame.font.Font(None, 30)
 BOLD_FONT = pygame.font.Font(None, 40)
 LARGE_FONT = pygame.font.Font(None, 80)
 PIECE_FONT = pygame.font.Font(None, SQUARE_SIZE)
-# Assuming you have a Lessons list defined elsewhere
-LESSONS: list = []
-
+LESSONS = [
+    {
+        "title": "Lesson 1: The Board and Pieces",
+        "content": (
+            "The chessboard is an 8x8 grid of squares.\n"
+            "There are 32 pieces in total: 16 for each player.\n"
+            "Each player has 8 pawns, 2 rooks, 2 knights, 2 bishops, 1 queen, and 1 king.\n"
+            "White always moves first."
+        )
+    },
+    {
+        "title": "Lesson 2: The Pawn",
+        "content": (
+            "Pawns move forward one square, but on their first move they can move two squares.\n"
+            "Pawns capture diagonally one square in front of them.\n"
+            "They are the only piece that cannot move backward.\n"
+            "When a pawn reaches the opposite side of the board, it can be promoted to a queen, rook, bishop, or knight."
+        )
+    },
+    {
+        "title": "Lesson 3: The Rook",
+        "content": (
+            "Rooks move in straight lines, horizontally or vertically.\n"
+            "They can move any number of empty squares in a single turn.\n"
+            "Rooks are very powerful in the endgame when the board is more open.\n"
+            "A special move called 'castling' can be performed with the king and a rook."
+        )
+    },
+]
 # Pygame setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Chess Engine")
@@ -201,7 +227,7 @@ class King(Piece):
                 ch = arr[r-1][c-1]
                 if ch == " " or self.is_enemy(arr, r, c):
                     moves.append((r, c))
-        if not self.moved: # Removed the `and not game.in_check(self.color)` to fix recursion
+        if not self.moved: 
             row = 1 if self.color == "white" else 8
             if game.can_castle(self.color, king_side=True):
                 moves.append((row, 7))
@@ -325,21 +351,21 @@ class Game:
     def is_attacked(self, pos, color):
         """
         Checks if a given position is attacked by the specified color.
-        This version avoids recursion by not calling gen_moves.
+        This version avoids recursion by not calling gen_moves and uses correct
+        1-based coordinates for the board.
         """
         row, col = pos
 
         # Check for pawn attacks
         pawn_direction = -1 if color == "white" else 1
-        pawn_attack_rows = [row + pawn_direction]
-        pawn_attack_cols = [col - 1, col + 1]
-
-        for attack_row in pawn_attack_rows:
-            for attack_col in pawn_attack_cols:
-                if 0 <= attack_row < 8 and 0 <= attack_col < 8:
-                    piece = self.board.piece_at((attack_row, attack_col))
-                    if piece and piece.color == color and piece.name == "pawn":
-                        return True
+        
+        # Corrected loop for pawns
+        for dc in [-1, 1]:
+            attack_row, attack_col = row + pawn_direction, col + dc
+            if 1 <= attack_row <= 8 and 1 <= attack_col <= 8:
+                piece = self.piece_at((attack_row, attack_col))
+                if piece and piece.color == color and piece.name == "pawn":
+                    return True
 
         # Check for Knight attacks
         knight_moves = [
@@ -349,8 +375,8 @@ class Game:
             (row - 1, col + 2), (row - 1, col - 2)
         ]
         for move_row, move_col in knight_moves:
-            if 0 <= move_row < 8 and 0 <= move_col < 8:
-                piece = self.board.piece_at((move_row, move_col))
+            if 1 <= move_row <= 8 and 1 <= move_col <= 8:
+                piece = self.piece_at((move_row, move_col))
                 if piece and piece.color == color and piece.name == "knight":
                     return True
 
@@ -359,9 +385,9 @@ class Game:
         for dr, dc in directions:
             for i in range(1, 8):
                 r, c = row + dr * i, col + dc * i
-                if not (0 <= r < 8 and 0 <= c < 8):
+                if not (1 <= r <= 8 and 1 <= c <= 8):
                     break
-                piece = self.board.piece_at((r, c))
+                piece = self.piece_at((r, c))
                 if piece:
                     if piece.color == color and (piece.name == "rook" or piece.name == "queen"):
                         return True
@@ -373,9 +399,9 @@ class Game:
         for dr, dc in directions:
             for i in range(1, 8):
                 r, c = row + dr * i, col + dc * i
-                if not (0 <= r < 8 and 0 <= c < 8):
+                if not (1 <= r <= 8 and 1 <= c <= 8):
                     break
-                piece = self.board.piece_at((r, c))
+                piece = self.piece_at((r, c))
                 if piece:
                     if piece.color == color and (piece.name == "bishop" or piece.name == "queen"):
                         return True
@@ -389,8 +415,8 @@ class Game:
             (row + 1, col - 1), (row + 1, col), (row + 1, col + 1)
         ]
         for move_row, move_col in king_moves:
-            if 0 <= move_row < 8 and 0 <= move_col < 8:
-                piece = self.board.piece_at((move_row, move_col))
+            if 1 <= move_row <= 8 and 1 <= move_col <= 8:
+                piece = self.piece_at((move_row, move_col))
                 if piece and piece.color == color and piece.name == "king":
                     return True
 
@@ -433,6 +459,10 @@ class Game:
 
         captured_piece = self.piece_at(dst)
         
+        # Check for king capture
+        if captured_piece and captured_piece.name == "king":
+            return False
+
         # Snapshot for `outcome` check
         snapshot = self._snapshot()
 
@@ -652,6 +682,7 @@ class Game:
                 return False
         
         return True
+
     def _check_for_three_fold_repetition(self) -> bool:
         current_fen = self.board_to_fen()
         count = self.full_move_history.count(current_fen)
@@ -664,16 +695,15 @@ class Game:
         if not self.get_all_legal_moves(self.to_move):
             if self.in_check(self.to_move):
                 winner = "black" if self.to_move == "white" else "white"
-                return f"{winner} wins"
+                return f"{winner} wins by checkmate"
             else:
                 return "stalemate"
         if self._check_for_three_fold_repetition():
             return "threefold repetition"
         if self._check_for_fifty_move_rule():
             return "fifty move rule"
-        
         return None
-        
+
     def _snapshot(self) -> Any:
         # Save a copy of the current game state
         state = {
@@ -704,7 +734,7 @@ class Game:
     def piece_value(self, piece_symbol: str) -> int:
         symbol = piece_symbol.upper()
         return PIECE_VALUES.get(symbol, 0)
-    
+
     def board_to_fen(self) -> str:
         fen = ""
         for r in range(7, -1, -1):
@@ -716,20 +746,31 @@ class Game:
                 else:
                     if empty_count > 0:
                         fen += str(empty_count)
-                        empty_count = 0
+                    empty_count = 0
                     fen += piece
             if empty_count > 0:
                 fen += str(empty_count)
             if r > 0:
                 fen += "/"
-        
         fen += f" {self.to_move[0]}"
-        
         castling = ""
-        if self.kings["white"].can_castle_king_side: castling += "K"
-        if self.kings["white"].can_castle_queen_side: castling += "Q"
-        if self.kings["black"].can_castle_king_side: castling += "k"
-        if self.kings["black"].can_castle_queen_side: castling += "q"
+        # The following needs to be fixed to reflect the King's move history, not a global flag
+        white_king_moved = self.kings["white"].moved
+        black_king_moved = self.kings["black"].moved
+        white_kingside_rook_moved = self.piece_at((1, 8)) is None or self.piece_at((1, 8)).moved
+        white_queenside_rook_moved = self.piece_at((1, 1)) is None or self.piece_at((1, 1)).moved
+        black_kingside_rook_moved = self.piece_at((8, 8)) is None or self.piece_at((8, 8)).moved
+        black_queenside_rook_moved = self.piece_at((8, 1)) is None or self.piece_at((8, 1)).moved
+
+        if not white_king_moved and not white_kingside_rook_moved:
+            castling += "K"
+        if not white_king_moved and not white_queenside_rook_moved:
+            castling += "Q"
+        if not black_king_moved and not black_kingside_rook_moved:
+            castling += "k"
+        if not black_king_moved and not black_queenside_rook_moved:
+            castling += "q"
+
         if not castling:
             castling = "-"
         fen += f" {castling}"
@@ -739,6 +780,7 @@ class Game:
         fen += f" {en_passant_target}"
         fen += f" {self.halfmove_clock} {self.move_number}"
         return fen
+
 
     def _create_custom_game(self, start_pos, turn, en_passant_target=None):
         self.init_board() # Reset to a clean state first
@@ -757,7 +799,6 @@ class Game:
         self.to_move = turn
         self.en_passant_target = en_passant_target
         self.history.append(self._snapshot())
-
 class ChessGUI:
     def __init__(self, game):
         self.game = game
@@ -769,442 +810,510 @@ class ChessGUI:
         self.game_mode: Optional[str] = "Start"
         self.sound_on = True
         self.piece_images: Dict[str, pygame.Surface] = {}
+        
+        pygame.mixer.init()
+        try:
+            self.sound_move = pygame.mixer.Sound(os.path.join("sounds", "move.wav"))
+            self.sound_capture = pygame.mixer.Sound(os.path.join("sounds", "capture.wav"))
+            self.sound_check = pygame.mixer.Sound(os.path.join("sounds", "check.wav"))
+            self.sound_game_over = pygame.mixer.Sound(os.path.join("sounds", "game_over.wav"))
+            self.sound_checkmate = pygame.mixer.Sound(os.path.join("sounds", "checkmate.wav"))
+        except pygame.error:
+            print("Sound files not found. Sounds will be disabled.")
+            self.sound_on = False
+
         self.load_images()
-        freq = 44100
-        size = -16
-        channels = 1
-        buffer_size = 500
-        period = freq // 1000
-        volume = 12000
-        sound_buffer = array.array('h', [0] * buffer_size)
-        for i in range(buffer_size):
-            if i % period < period / 2:
-                sound_buffer[i] = volume
-            else:
-                sound_buffer[i] = -volume
-        self.move_sound = pygame.mixer.Sound(sound_buffer)
-        self.ai = AI(game, depth=2)
-    def _piece_name(self, symbol: str) -> str:
-        """Returns the full name of a piece based on its symbol."""
-        symbol = symbol.lower()
-        if symbol == 'p': return 'Pawn'
-        if symbol == 'n': return 'Knight'
-        if symbol == 'b': return 'Bishop'
-        if symbol == 'r': return 'Rook'
-        if symbol == 'q': return 'Queen'
-        if symbol == 'k': return 'King'
-        return ' '
+        self.screen_changed_callback = None
+        self.current_lesson: Optional[Dict[str, str]] = None
+    
+    def set_screen_changed_callback(self, callback):
+        if callable(callback):
+            self.screen_changed_callback = callback
+    
+    def on_screen_changed(self):
+        if self.screen_changed_callback:
+            self.screen_changed_callback()
+    
     def load_images(self):
-        """Loads all piece images with the color-type.png naming convention."""
         piece_map = {
-            'p': 'pawn',
-            'n': 'knight',
-            'b': 'bishop',
-            'r': 'rook',
-            'q': 'queen',
-            'k': 'king'
+            'P': 'white-pawn.png', 'R': 'white-rook.png', 'N': 'white-knight.png',
+            'B': 'white-bishop.png', 'Q': 'white-queen.png', 'K': 'white-king.png',
+            'p': 'black-pawn.png', 'r': 'black-rook.png', 'n': 'black-knight.png',
+            'b': 'black-bishop.png', 'q': 'black-queen.png', 'k': 'black-king.png'
         }
-        image_dir = 'pieces'
-        if not os.path.exists(image_dir):
-            print(f"Error: The '{image_dir}' directory was not found. Please create this folder and place your piece images inside.")
-            return
-        for color_name in ['white', 'black']:
-            for symbol, piece_name in piece_map.items():
-                filename = f"{color_name}-{piece_name}.png"
-                img_path = os.path.join(image_dir, filename)
+        
+        image_loaded = False
+        image_folder = "pieces" 
+        for symbol, filename in piece_map.items():
+            img_path = os.path.join(image_folder, filename)
+            if os.path.exists(img_path):
                 try:
-                    img = pygame.image.load(img_path).convert_alpha()
-                    self.piece_images[color_name[0] + symbol] = pygame.transform.scale(img, (SQUARE_SIZE, SQUARE_SIZE))
-                except pygame.error:
-                    print(f"Error loading image {filename}. The file might be missing or corrupted.")
-                    self.piece_images[color_name[0] + symbol] = None
-        if len(self.piece_images) != 12 or any(img is None for img in self.piece_images.values()):
-            print("Warning: Not all piece images were loaded successfully. Pieces may not display correctly.")
+                    self.piece_images[symbol] = pygame.transform.scale(
+                        pygame.image.load(img_path), (SQUARE_SIZE, SQUARE_SIZE)
+                    )
+                    image_loaded = True
+                except pygame.error as e:
+                    print(f"Error loading image {img_path}: {e}")
+                    image_loaded = False
+                    break 
 
-    def draw_board(self, lesson_info=None):
-        """Draws the main board, pieces, and coordinates on all four sides."""
-        # Calculate board offset to center it for the new screen width
-        board_offset_x = (SCREEN_WIDTH - BOARD_SIZE_PX) // 2
-        board_offset_y = (SCREEN_HEIGHT - BOARD_SIZE_PX) // 2
-        # Draw chess board squares
-        for row in range(BOARD_SIZE):
-            for col in range(BOARD_SIZE):
-                color = WHITE if (row + col) % 2 == 0 else BLACK
-                pygame.draw.rect(screen, color, (board_offset_x + col * SQUARE_SIZE, board_offset_y + (BOARD_SIZE - row - 1) * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-        # Draw coordinates on all four sides
-        coord_margin = 5
-        for i in range(BOARD_SIZE):
-            # Letters at top and bottom (a-h)
-            letter = chr(ord('a') + i)
-            text = FONT.render(letter, True, COORD_COLOR)
-            screen.blit(text, (board_offset_x + i * SQUARE_SIZE + SQUARE_SIZE // 2 - text.get_width() // 2, board_offset_y - text.get_height() - coord_margin))
-            screen.blit(text, (board_offset_x + i * SQUARE_SIZE + SQUARE_SIZE // 2 - text.get_width() // 2, board_offset_y + BOARD_SIZE_PX + coord_margin))
-            # Numbers on left and right (1 at bottom, 8 at top)
-            number = str(8 - i)
-            text = FONT.render(number, True, COORD_COLOR)
-            screen.blit(text, (board_offset_x - text.get_width() - coord_margin, board_offset_y + i * SQUARE_SIZE + SQUARE_SIZE // 2 - text.get_height() // 2))
-            screen.blit(text, (board_offset_x + BOARD_SIZE_PX + coord_margin, board_offset_y + i * SQUARE_SIZE + SQUARE_SIZE // 2 - text.get_height() // 2))
-        # Highlight selected square
+        if not image_loaded:
+            print("Could not find piece images or an error occurred. Using fallback shapes.")
+            white_color = (255, 255, 255)
+            black_color = (0, 0, 0)
+            
+            for piece_symbol, color in [
+                ('P', white_color), ('R', white_color), ('N', white_color),
+                ('B', white_color), ('Q', white_color), ('K', white_color),
+                ('p', black_color), ('r', black_color), ('n', black_color),
+                ('b', black_color), ('q', black_color), ('k', black_color),
+            ]:
+                surface = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
+                
+                if piece_symbol.lower() == 'p':
+                    pygame.draw.circle(surface, color, (SQUARE_SIZE // 2, SQUARE_SIZE // 2), SQUARE_SIZE // 4)
+                elif piece_symbol.lower() == 'r':
+                    pygame.draw.rect(surface, color, (SQUARE_SIZE // 4, SQUARE_SIZE // 4, SQUARE_SIZE // 2, SQUARE_SIZE // 2))
+                elif piece_symbol.lower() == 'n':
+                    pygame.draw.polygon(surface, color, [
+                        (SQUARE_SIZE//2, SQUARE_SIZE//4), (SQUARE_SIZE//4, SQUARE_SIZE//2),
+                        (SQUARE_SIZE//2, SQUARE_SIZE//2), (SQUARE_SIZE*3//4, SQUARE_SIZE//2)
+                    ])
+                elif piece_symbol.lower() == 'b':
+                    pygame.draw.circle(surface, color, (SQUARE_SIZE // 2, SQUARE_SIZE // 2), SQUARE_SIZE // 3)
+                    pygame.draw.polygon(surface, color, [
+                        (SQUARE_SIZE // 2, SQUARE_SIZE // 3), (SQUARE_SIZE // 4, SQUARE_SIZE * 2 // 3),
+                        (SQUARE_SIZE * 3 // 4, SQUARE_SIZE * 2 // 3)
+                    ])
+                elif piece_symbol.lower() == 'q':
+                    pygame.draw.circle(surface, color, (SQUARE_SIZE // 2, SQUARE_SIZE // 2), SQUARE_SIZE // 2)
+                elif piece_symbol.lower() == 'k':
+                    pygame.draw.circle(surface, color, (SQUARE_SIZE // 2, SQUARE_SIZE // 2), SQUARE_SIZE // 2)
+                    pygame.draw.line(surface, (255-color[0], 255-color[1], 255-color[2]), (SQUARE_SIZE//2 - 10, SQUARE_SIZE//2), (SQUARE_SIZE//2 + 10, SQUARE_SIZE//2), 3)
+                    pygame.draw.line(surface, (255-color[0], 255-color[1], 255-color[2]), (SQUARE_SIZE//2, SQUARE_SIZE//2 - 10), (SQUARE_SIZE//2, SQUARE_SIZE//2 + 10), 3)
+                
+                self.piece_images[piece_symbol] = surface
+
+    def draw_board(self):
+        for r in range(BOARD_SIZE):
+            for c in range(BOARD_SIZE):
+                color = WHITE if (r + c) % 2 == 0 else BLACK
+                rect = pygame.Rect(c * SQUARE_SIZE, r * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
+                pygame.draw.rect(screen, color, rect)
+
         if self.selected:
-            row_idx, col_idx = self.selected[0] - 1, self.selected[1] - 1
-            s = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
-            s.fill(HIGHLIGHT)
-            screen.blit(s, (board_offset_x + col_idx * SQUARE_SIZE, board_offset_y + (BOARD_SIZE - row_idx - 1) * SQUARE_SIZE))
-        # Highlight valid moves
+            pygame.draw.rect(screen, HIGHLIGHT, (
+                (self.selected[1] - 1) * SQUARE_SIZE,
+                (BOARD_SIZE - self.selected[0]) * SQUARE_SIZE,
+                SQUARE_SIZE,
+                SQUARE_SIZE
+            ), 5)
+            
+        if self.game.in_check(self.game.to_move):
+            king_pos = self.game.kings[self.game.to_move].pos()
+            if king_pos:
+                pygame.draw.rect(screen, CHECK_RED, (
+                    (king_pos[1] - 1) * SQUARE_SIZE,
+                    (BOARD_SIZE - king_pos[0]) * SQUARE_SIZE,
+                    SQUARE_SIZE,
+                    SQUARE_SIZE
+                ), 5)
+
         for move in self.valid_moves:
-            row_idx, col_idx = move[0] - 1, move[1] - 1
-            s = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
-            s.fill(MOVE_HIGHLIGHT)
-            screen.blit(s, (board_offset_x + col_idx * SQUARE_SIZE, board_offset_y + (BOARD_SIZE - row_idx - 1) * SQUARE_SIZE))
-        # Highlight king in check
-        king_pos = self.game.kings.get(self.game.to_move)
-        if king_pos and self.game.in_check(self.game.to_move):
-            row_idx, col_idx = king_pos.pos()[0] - 1, king_pos.pos()[1] - 1
-            s = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
-            s.fill(CHECK_RED)
-            screen.blit(s, (board_offset_x + col_idx * SQUARE_SIZE, board_offset_y + (BOARD_SIZE - row_idx - 1) * SQUARE_SIZE))
-        # Draw pieces with images
+            pygame.draw.circle(screen, MOVE_HIGHLIGHT, (
+                (move[1] - 1) * SQUARE_SIZE + SQUARE_SIZE // 2,
+                (BOARD_SIZE - move[0]) * SQUARE_SIZE + SQUARE_SIZE // 2
+            ), SQUARE_SIZE // 8)
+            
+    def draw_pieces(self):
         for piece in self.game.pieces:
-            piece_symbol = piece.symbol
-            if piece_symbol != " ":
-                piece_color_char = 'w' if piece_symbol.isupper() else 'b'
-                image_key = piece_color_char + piece_symbol.lower()
-                r, c = piece.pos()
-                if image_key in self.piece_images and self.piece_images[image_key] is not None:
-                    image = self.piece_images[image_key]
-                    screen_y = board_offset_y + (BOARD_SIZE - r) * SQUARE_SIZE
-                    screen_x = board_offset_x + (c - 1) * SQUARE_SIZE
-                    screen.blit(image, (screen_x, screen_y))
-    def draw_sidebar(self, turn_label: str):
-        # Sidebar for move history, captured pieces, and controls
-        sidebar_x = SCREEN_WIDTH - 250
-        sidebar_y = 50
-        pygame.draw.rect(screen, BUTTON_COLOR, (sidebar_x - 10, sidebar_y - 10, 240, SCREEN_HEIGHT - 60))
+            img = self.piece_images.get(piece.symbol)
+            if img:
+                screen.blit(img, (
+                    (piece.col - 1) * SQUARE_SIZE,
+                    (BOARD_SIZE - piece.row) * SQUARE_SIZE
+                ))
+    
+    def draw_coords(self):
+        for i in range(1, 9):
+            text = FONT.render(COL_TO_FILE[i], True, COORD_COLOR)
+            text_rect = text.get_rect(center=(
+                (i - 1) * SQUARE_SIZE + SQUARE_SIZE // 2,
+                BOARD_SIZE_PX + 20
+            ))
+            screen.blit(text, text_rect)
+            
+            text = FONT.render(str(i), True, COORD_COLOR)
+            text_rect = text.get_rect(center=(
+                -20,
+                (BOARD_SIZE - i) * SQUARE_SIZE + SQUARE_SIZE // 2
+            ))
+            screen.blit(text, text_rect)
+            
+    def draw_start_menu(self):
+        screen.fill(BACKGROUND_COLOR)
+        title_text = LARGE_FONT.render("Chess Engine", True, WHITE)
+        title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4))
+        screen.blit(title_text, title_rect)
+
+        button_width, button_height = 200, 60
+        button_y_start = SCREEN_HEIGHT // 2
+        button_gap = 20
         
-        # Display current turn
-        turn_text = BOLD_FONT.render(turn_label, True, TEXT_COLOR)
-        screen.blit(turn_text, (sidebar_x, sidebar_y))
-
-        # Display captured pieces
-        captured_x = sidebar_x
-        captured_y = sidebar_y + 50
+        self.play_button = self.create_button(
+            "Play",
+            (SCREEN_WIDTH // 2 - button_width // 2, button_y_start),
+            (button_width, button_height)
+        )
+        self.lessons_button = self.create_button(
+            "Lessons",
+            (SCREEN_WIDTH // 2 - button_width // 2, button_y_start + button_height + button_gap),
+            (button_width, button_height)
+        )
+        self.quit_button = self.create_button(
+            "Quit",
+            (SCREEN_WIDTH // 2 - button_width // 2, button_y_start + 2*(button_height + button_gap)),
+            (button_width, button_height)
+        )
         
-        white_captured_text = FONT.render("White's captured pieces:", True, TEXT_COLOR)
-        screen.blit(white_captured_text, (captured_x, captured_y))
+        self.audio_button = self.create_button(
+            "Sound: ON" if self.sound_on else "Sound: OFF",
+            (SCREEN_WIDTH - 220, 20),
+            (200, 50)
+        )
         
-        self._draw_captured_pieces(captured_x, captured_y + 30, self.game.captured_pieces['white'])
+        pygame.display.flip()
 
-        black_captured_text = FONT.render("Black's captured pieces:", True, TEXT_COLOR)
-        screen.blit(black_captured_text, (captured_x, captured_y + 100))
+    def draw_lessons_menu(self):
+        screen.fill(BACKGROUND_COLOR)
+        title_text = LARGE_FONT.render("Lessons", True, WHITE)
+        title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, 100))
+        screen.blit(title_text, title_rect)
+
+        button_width, button_height = 400, 60
+        button_y_start = 200
+        button_gap = 20
+        self.lesson_buttons = []
+        for i, lesson in enumerate(LESSONS):
+            button = self.create_button(
+                lesson['title'],
+                (SCREEN_WIDTH // 2 - button_width // 2, button_y_start + i * (button_height + button_gap)),
+                (button_width, button_height)
+            )
+            self.lesson_buttons.append(button)
+
+        self.back_button = self.create_button(
+            "Back",
+            (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 100),
+            (200, 60)
+        )
+
+        pygame.display.flip()
+
+    def draw_lesson_screen(self):
+        screen.fill(BACKGROUND_COLOR)
+        if self.current_lesson:
+            title_text = BOLD_FONT.render(self.current_lesson['title'], True, WHITE)
+            title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, 100))
+            screen.blit(title_text, title_rect)
+            
+            content_text = self.current_lesson['content']
+            y_offset = 150
+            for line in content_text.split('\n'):
+                text_surf = FONT.render(line, True, WHITE)
+                screen.blit(text_surf, (100, y_offset))
+                y_offset += 30
         
-        self._draw_captured_pieces(captured_x, captured_y + 130, self.game.captured_pieces['black'])
-
-        # Display move history
-        history_x = sidebar_x
-        history_y = captured_y + 200
-        history_text_title = FONT.render("Move History:", True, TEXT_COLOR)
-        screen.blit(history_text_title, (history_x, history_y))
-
-        history_list_y = history_y + 30
-        for i, move in enumerate(self.game.full_move_history):
-            if i >= 10: break
-            move_text = FONT.render(move, True, TEXT_COLOR)
-            screen.blit(move_text, (history_x, history_list_y + i * 25))
-
-        # Buttons
-        button_width, button_height = 100, 40
-        button_y = SCREEN_HEIGHT - 100
+        self.back_button = self.create_button(
+            "Back",
+            (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 100),
+            (200, 60)
+        )
         
-        # New Game Button
-        new_game_rect = pygame.Rect(sidebar_x, button_y, button_width, button_height)
-        pygame.draw.rect(screen, BUTTON_COLOR, new_game_rect)
-        new_game_text = FONT.render("New Game", True, TEXT_COLOR)
-        screen.blit(new_game_text, (new_game_rect.centerx - new_game_text.get_width() // 2, new_game_rect.centery - new_game_text.get_height() // 2))
+        pygame.display.flip()
 
-    def _draw_captured_pieces(self, x, y, pieces: List[Piece]):
-        piece_symbols = [p.symbol for p in pieces]
-        text = FONT.render(" ".join(piece_symbols), True, TEXT_COLOR)
-        screen.blit(text, (x, y))
+    def create_button(self, text, pos, size, hover_color=BUTTON_HOVER_COLOR):
+        rect = pygame.Rect(pos, size)
+        mouse_pos = pygame.mouse.get_pos()
+        color = hover_color if rect.collidepoint(mouse_pos) else BUTTON_COLOR
+        pygame.draw.rect(screen, color, rect, border_radius=10)
+        
+        text_surf = FONT.render(text, True, TEXT_COLOR)
+        text_rect = text_surf.get_rect(center=rect.center)
+        screen.blit(text_surf, text_rect)
+        return rect
+
+    def handle_start_menu_click(self, event):
+        if event.button == 1:
+            if self.play_button.collidepoint(event.pos):
+                self.game_mode = "Game"
+                self.game.reset_game()
+                self.on_screen_changed()
+            elif self.lessons_button.collidepoint(event.pos):
+                self.game_mode = "Lessons"
+                self.on_screen_changed()
+            elif self.quit_button.collidepoint(event.pos):
+                pygame.quit()
+                sys.exit()
+            elif self.audio_button.collidepoint(event.pos):
+                self.sound_on = not self.sound_on
+                
+    def handle_lessons_menu_click(self, event):
+        if event.button == 1:
+            if self.back_button.collidepoint(event.pos):
+                self.game_mode = "Start"
+                self.on_screen_changed()
+                return
+
+            for i, button in enumerate(self.lesson_buttons):
+                if button.collidepoint(event.pos):
+                    self.current_lesson = LESSONS[i]
+                    self.game_mode = "LessonContent"
+                    self.on_screen_changed()
+                    return
+
+    def handle_lesson_content_click(self, event):
+        if event.button == 1:
+            if self.back_button.collidepoint(event.pos):
+                self.current_lesson = None
+                self.game_mode = "Lessons"
+                self.on_screen_changed()
+
+    def handle_mouse_click(self, event):
+        if self.game_mode == "Start":
+            self.handle_start_menu_click(event)
+            return
+        elif self.game_mode == "Lessons":
+            self.handle_lessons_menu_click(event)
+            return
+        elif self.game_mode == "LessonContent":
+            self.handle_lesson_content_click(event)
+            return
+
+        if self.game_over_text:
+            self.handle_game_over_click(event)
+            return
+
+        x, y = event.pos
+        col = x // SQUARE_SIZE + 1
+        row = BOARD_SIZE - (y // SQUARE_SIZE)
+        pos = (row, col)
+
+        if not (1 <= row <= 8 and 1 <= col <= 8):
+            return
+
+        piece = self.game.piece_at(pos)
+
+        if self.promoting:
+            self.handle_promotion_click(pos)
+            return
+            
+        if self.selected:
+            if pos in self.valid_moves:
+                if self.game.make_move(self.selected, pos):
+                    if self.sound_on:
+                        if self.game.piece_at(pos) and self.game.piece_at(pos).symbol.lower() != 'k':
+                            self.sound_capture.play()
+                        else:
+                            self.sound_move.play()
+
+                    self.selected = None
+                    self.valid_moves = []
+                    
+                    if self.game.in_check(self.game.to_move) and self.sound_on:
+                        self.sound_check.play()
+
+                    self.game_over_text = self.game.outcome()
+                    if self.game_over_text:
+                        if self.sound_on:
+                            self.sound_game_over.play()
+
+                    moved_piece = self.game.piece_at(pos)
+                    if isinstance(moved_piece, Pawn) and (moved_piece.row == 1 or moved_piece.row == 8):
+                        self.promoting = True
+                        self.promotion_move = pos
+                else:
+                    self.selected = None
+                    self.valid_moves = []
+            else:
+                self.selected = pos if piece and piece.color == self.game.to_move else None
+                selected_piece = self.game.piece_at(self.selected)
+                self.valid_moves = self.game.legal_moves_for(selected_piece) if selected_piece else []
+        else:
+            if piece and piece.color == self.game.to_move:
+                self.selected = pos
+                self.valid_moves = self.game.legal_moves_for(piece)
 
     def draw_game_over(self):
-        if self.game_over_text:
-            overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
-            overlay.fill((0, 0, 0, 150))
-            screen.blit(overlay, (0, 0))
+        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 150))
+        screen.blit(overlay, (0, 0))
+
+        text_surf = LARGE_FONT.render(self.game_over_text, True, WHITE)
+        text_rect = text_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
+        screen.blit(text_surf, text_rect)
+
+        self.play_again_button = self.create_button(
+            "Play Again",
+            (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 50),
+            (200, 60)
+        )
+        self.back_to_menu_button = self.create_button(
+            "Back to Menu",
+            (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 130),
+            (200, 60)
+        )
+    
+    def handle_game_over_click(self, event):
+        if event.button == 1:
+            if self.play_again_button.collidepoint(event.pos):
+                self.game.reset_game()
+                self.game_over_text = None
+            elif self.back_to_menu_button.collidepoint(event.pos):
+                self.game_mode = "Start"
+                self.game_over_text = None
+                
+    def draw_promotion_dialog(self):
+        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 150))
+        screen.blit(overlay, (0, 0))
+
+        dialog_width, dialog_height = 400, 200
+        dialog_rect = pygame.Rect(
+            (SCREEN_WIDTH - dialog_width) // 2,
+            (SCREEN_HEIGHT - dialog_height) // 2,
+            dialog_width, dialog_height
+        )
+        pygame.draw.rect(screen, WHITE, dialog_rect, border_radius=10)
+        pygame.draw.rect(screen, BLACK, dialog_rect, 2, border_radius=10)
+
+        text_surf = FONT.render("Promote to:", True, TEXT_COLOR)
+        text_rect = text_surf.get_rect(center=(dialog_rect.centerx, dialog_rect.top + 30))
+        screen.blit(text_surf, text_rect)
+
+        pieces_to_promote = ['q', 'r', 'b', 'n']
+        for i, piece_char in enumerate(pieces_to_promote):
+            symbol = piece_char.upper() if self.game.to_move == "black" else piece_char
+            img = self.piece_images.get(symbol)
+            if img:
+                img_rect = img.get_rect(
+                    center=(
+                        dialog_rect.left + (i + 1) * dialog_width // 5,
+                        dialog_rect.bottom - 60
+                    )
+                )
+                screen.blit(img, img_rect)
+                
+    def handle_promotion_click(self, pos):
+        dialog_rect = pygame.Rect(
+            (SCREEN_WIDTH - 400) // 2,
+            (SCREEN_HEIGHT - 200) // 2,
+            400, 200
+        )
+        
+        pieces_to_promote = ['q', 'r', 'b', 'n']
+        for i, piece_char in enumerate(pieces_to_promote):
+            img_rect = pygame.Rect(
+                dialog_rect.left + (i + 1) * 400 // 5 - SQUARE_SIZE // 2,
+                dialog_rect.bottom - 60 - SQUARE_SIZE // 2,
+                SQUARE_SIZE, SQUARE_SIZE
+            )
             
-            text_surface = LARGE_FONT.render(self.game_over_text, True, (255, 255, 255))
-            text_rect = text_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-            screen.blit(text_surface, text_rect)
-            
-            # Restart button
-            restart_rect = pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 50, 200, 50)
-            pygame.draw.rect(screen, BUTTON_COLOR, restart_rect)
-            restart_text = BOLD_FONT.render("Restart", True, TEXT_COLOR)
-            restart_text_rect = restart_text.get_rect(center=restart_rect.center)
-            screen.blit(restart_text, restart_text_rect)
+            x, y = pygame.mouse.get_pos()
+            if img_rect.collidepoint(x, y):
+                self.game.make_move(
+                    self.promotion_move,
+                    self.promotion_move,
+                    promo_piece=piece_char
+                )
+                self.promoting = False
+                self.promotion_move = None
+                self.game_over_text = self.game.outcome()
+                if self.game_over_text and self.sound_on:
+                    self.sound_checkmate.play()
+                return
 
-            return restart_rect
-        return None
+    def draw_sidebar(self):
+        sidebar_rect = pygame.Rect(BOARD_SIZE_PX, 0, SCREEN_WIDTH - BOARD_SIZE_PX, SCREEN_HEIGHT)
+        pygame.draw.rect(screen, BACKGROUND_COLOR, sidebar_rect)
 
-    def draw_promotion_dialog(self, king_pos_x, king_pos_y):
-        promotion_pieces = ['Q', 'R', 'B', 'N']
-        dialog_width = SQUARE_SIZE * len(promotion_pieces)
-        dialog_height = SQUARE_SIZE
-        dialog_rect = pygame.Rect(king_pos_x, king_pos_y, dialog_width, dialog_height)
-        pygame.draw.rect(screen, WHITE, dialog_rect)
-        pygame.draw.rect(screen, BLACK, dialog_rect, 2)
-        
-        piece_color_char = 'w' if self.game.to_move == "white" else 'b'
-        
-        for i, piece_symbol in enumerate(promotion_pieces):
-            image_key = piece_color_char + piece_symbol.lower()
-            if image_key in self.piece_images and self.piece_images[image_key] is not None:
-                image = self.piece_images[image_key]
-                screen.blit(image, (king_pos_x + i * SQUARE_SIZE, king_pos_y))
-        
-        return dialog_rect, promotion_pieces
-
-    def draw_start_menu(self):
-        menu_bg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
-        menu_bg.fill((0, 0, 0, 150))
-        screen.blit(menu_bg, (0, 0))
-
-        title_text = LARGE_FONT.render("Chess Engine", True, WHITE)
-        title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 150))
+        title_text = BOLD_FONT.render("Game Stats", True, WHITE)
+        title_rect = title_text.get_rect(center=(
+            (BOARD_SIZE_PX + SCREEN_WIDTH) // 2,
+            50
+        ))
         screen.blit(title_text, title_rect)
         
-        # Buttons
-        button_width, button_height = 200, 60
+        self.draw_captured_pieces()
+        self.draw_moves_history()
         
-        # Play vs AI Button
-        play_ai_rect = pygame.Rect(SCREEN_WIDTH // 2 - button_width // 2, SCREEN_HEIGHT // 2, button_width, button_height)
-        pygame.draw.rect(screen, BUTTON_COLOR, play_ai_rect)
-        play_ai_text = BOLD_FONT.render("Play vs AI", True, TEXT_COLOR)
-        play_ai_text_rect = play_ai_text.get_rect(center=play_ai_rect.center)
-        screen.blit(play_ai_text, play_ai_text_rect)
-
-        # Play vs Player Button
-        play_player_rect = pygame.Rect(SCREEN_WIDTH // 2 - button_width // 2, SCREEN_HEIGHT // 2 + 80, button_width, button_height)
-        pygame.draw.rect(screen, BUTTON_COLOR, play_player_rect)
-        play_player_text = BOLD_FONT.render("Play vs Player", True, TEXT_COLOR)
-        play_player_text_rect = play_player_text.get_rect(center=play_player_rect.center)
-        screen.blit(play_player_text, play_player_text_rect)
+    def draw_captured_pieces(self):
+        white_captures_text = BOLD_FONT.render("White Captured", True, BAR_BLACK)
+        screen.blit(white_captures_text, (BOARD_SIZE_PX + 20, 100))
         
-        # Lessons Button
-        lessons_rect = pygame.Rect(SCREEN_WIDTH // 2 - button_width // 2, SCREEN_HEIGHT // 2 + 160, button_width, button_height)
-        pygame.draw.rect(screen, BUTTON_COLOR, lessons_rect)
-        lessons_text = BOLD_FONT.render("Lessons", True, TEXT_COLOR)
-        lessons_text_rect = lessons_text.get_rect(center=lessons_rect.center)
-        screen.blit(lessons_text, lessons_text_rect)
+        y_offset = 130
+        for i, piece in enumerate(self.game.captured_pieces["black"]):
+            img = self.piece_images.get(piece.symbol)
+            if img:
+                scaled_img = pygame.transform.scale(img, (SQUARE_SIZE // 2, SQUARE_SIZE // 2))
+                screen.blit(scaled_img, (
+                    BOARD_SIZE_PX + 20 + (i % 8) * (SQUARE_SIZE // 2 + 5),
+                    y_offset + (i // 8) * (SQUARE_SIZE // 2 + 5)
+                ))
+                
+        black_captures_text = BOLD_FONT.render("Black Captured", True, BAR_WHITE)
+        screen.blit(black_captures_text, (BOARD_SIZE_PX + 20, 250))
+        
+        y_offset = 280
+        for i, piece in enumerate(self.game.captured_pieces["white"]):
+            img = self.piece_images.get(piece.symbol)
+            if img:
+                scaled_img = pygame.transform.scale(img, (SQUARE_SIZE // 2, SQUARE_SIZE // 2))
+                screen.blit(scaled_img, (
+                    BOARD_SIZE_PX + 20 + (i % 8) * (SQUARE_SIZE // 2 + 5),
+                    y_offset + (i // 8) * (SQUARE_SIZE // 2 + 5)
+                ))
 
-        return play_ai_rect, play_player_rect, lessons_rect
-    
+    def draw_moves_history(self):
+        history_text = BOLD_FONT.render("Moves", True, WHITE)
+        screen.blit(history_text, (BOARD_SIZE_PX + 20, 400))
+        
+        y_offset = 430
+        for i, move in enumerate(self.game.full_move_history):
+            text = FONT.render(move, True, WHITE)
+            screen.blit(text, (BOARD_SIZE_PX + 20, y_offset + i * 25))
+
     def run(self):
         running = True
-        ai_turn = False
         while running:
+            clock.tick(FPS)
             
-            # AI's Turn
-            if self.game.to_move == "black" and self.game_mode == "AI" and not self.promoting and not self.game_over_text:
-                if not ai_turn:
-                    print("AI is thinking...")
-                    ai_turn = True
-                else:
-                    move = self.ai.get_ai_move(self.game)
-                    if move:
-                        src, dst, promo = move
-                        self.game.make_move(src, dst, promo)
-                        if self.sound_on: self.move_sound.play()
-                        if self.game.outcome():
-                            self.game_over_text = self.game.outcome()
-                        self.selected = None
-                        self.valid_moves = []
-                    else:
-                        # AI has no legal moves, game over
-                        self.game_over_text = self.game.outcome()
-                    ai_turn = False
-
-            screen.fill(BACKGROUND_COLOR)
-            
-            if self.game_mode == "Start":
-                play_ai_rect, play_player_rect, lessons_rect = self.draw_start_menu()
-            elif self.game_mode == "Lessons":
-                # Draw lesson menu
-                pass
-            else: # Game mode is "AI" or "Player"
-                turn_label = f"{self.game.to_move.capitalize()}'s Turn"
-                self.draw_board()
-                self.draw_sidebar(turn_label)
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                
-                if self.game_mode == "Start":
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        if play_ai_rect.collidepoint(event.pos):
-                            self.game_mode = "AI"
-                            self.game.reset_game()
-                        elif play_player_rect.collidepoint(event.pos):
-                            self.game_mode = "Player"
-                            self.game.reset_game()
-                        elif lessons_rect.collidepoint(event.pos):
-                            self.game_mode = "Lessons"
-                            # Load lessons or show menu
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    self.handle_mouse_click(event)
 
-                elif self.game_mode == "Lessons":
-                    # Handle lesson menu events
-                    pass
-                else: # Game mode is "AI" or "Player"
-                    if event.type == pygame.MOUSEBUTTONDOWN and not self.game_over_text and not self.promoting:
-                        mouse_x, mouse_y = event.pos
-                        board_offset_x = (SCREEN_WIDTH - BOARD_SIZE_PX) // 2
-                        board_offset_y = (SCREEN_HEIGHT - BOARD_SIZE_PX) // 2
-                        if board_offset_x <= mouse_x < board_offset_x + BOARD_SIZE_PX and \
-                           board_offset_y <= mouse_y < board_offset_y + BOARD_SIZE_PX:
-                            
-                            col = (mouse_x - board_offset_x) // SQUARE_SIZE + 1
-                            row = BOARD_SIZE - ((mouse_y - board_offset_y) // SQUARE_SIZE)
-                            pos = (row, col)
+            if self.game_mode == "Start":
+                self.draw_start_menu()
+            elif self.game_mode == "Lessons":
+                self.draw_lessons_menu()
+            elif self.game_mode == "LessonContent":
+                self.draw_lesson_screen()
+            elif self.game_mode == "Game":
+                screen.fill(BACKGROUND_COLOR)
+                self.draw_board()
+                self.draw_pieces()
+                self.draw_coords()
+                self.draw_sidebar()
+                if self.promoting:
+                    self.draw_promotion_dialog()
+                if self.game_over_text:
+                    self.draw_game_over()
+                pygame.display.flip()
 
-                            piece = self.game.piece_at(pos)
-                            
-                            if self.selected:
-                                if pos in self.valid_moves:
-                                    # Promotion check
-                                    is_pawn = isinstance(self.game.piece_at(self.selected), Pawn)
-                                    is_promo_row = (row == 8 and self.game.to_move == "white") or (row == 1 and self.game.to_move == "black")
-                                    if is_pawn and is_promo_row:
-                                        self.promoting = True
-                                        self.promotion_move = (self.selected, pos)
-                                    else:
-                                        self.game.make_move(self.selected, pos)
-                                        if self.sound_on: self.move_sound.play()
-                                        if self.game.outcome():
-                                            self.game_over_text = self.game.outcome()
-                                        self.selected = None
-                                        self.valid_moves = []
-                                        ai_turn = False
-                                else:
-                                    self.selected = None
-                                    self.valid_moves = []
-                            
-                            if piece and piece.color == self.game.to_move:
-                                self.selected = pos
-                                self.valid_moves = self.game.legal_moves_for(piece)
-                        
-                        else: # Clicked outside the board
-                            self.selected = None
-                            self.valid_moves = []
-
-                    elif self.game_over_text and self.draw_game_over().collidepoint(event.pos):
-                        self.game_over_text = None
-                        self.game.reset_game()
-                        self.game_mode = "Start"
-
-                    elif self.promoting:
-                        # Handle promotion dialog click
-                        promo_rect, promo_pieces = self.draw_promotion_dialog(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 25)
-                        if promo_rect.collidepoint(event.pos):
-                            x, y = event.pos
-                            index = (x - promo_rect.left) // SQUARE_SIZE
-                            if 0 <= index < len(promo_pieces):
-                                promo_choice = promo_pieces[index]
-                                src, dst = self.promotion_move
-                                self.game.make_move(src, dst, promo_choice)
-                                if self.sound_on: self.move_sound.play()
-                                if self.game.outcome():
-                                    self.game_over_text = self.game.outcome()
-                                self.promoting = False
-                                self.promotion_move = None
-                                self.selected = None
-                                self.valid_moves = []
-                                ai_turn = False
-            
-            pygame.display.flip()
-            clock.tick(FPS)
-        
         pygame.quit()
         sys.exit()
-
-class AI:
-    def __init__(self, game: Game, depth: int):
-        self.game = game
-        self.depth = depth
-
-    def get_ai_move(self, game: Game) -> Optional[Tuple[Position, Position, Optional[str]]]:
-        self.game = game
-        best_move, _ = self.minimax(self.depth, "black")
-        return best_move
-
-    def minimax(self, depth: int, player: str) -> Tuple[Optional[Tuple[Position, Position, Optional[str]]], int]:
-        if depth == 0 or self.game.outcome():
-            return None, self.evaluate_board()
-
-        best_move = None
-        if player == "black":
-            max_eval = float('-inf')
-            legal_moves = self.game.get_all_legal_moves(player)
-            for move in legal_moves:
-                src, dst = move
-                piece = self.game.piece_at(src)
-                promo_piece = None
-                
-                # Check for pawn promotion
-                if isinstance(piece, Pawn) and (dst[0] == 8 or dst[0] == 1):
-                    # AI always promotes to queen for simplicity
-                    promo_piece = 'q'
-
-                snapshot = self.game._snapshot()
-                self.game.make_move(src, dst, promo_piece)
-                _, eval = self.minimax(depth - 1, "white")
-                self.game._restore_snapshot(snapshot)
-
-                if eval > max_eval:
-                    max_eval = eval
-                    best_move = (src, dst, promo_piece)
-            return best_move, max_eval
-        else: # white
-            min_eval = float('inf')
-            legal_moves = self.game.get_all_legal_moves(player)
-            for move in legal_moves:
-                src, dst = move
-                piece = self.game.piece_at(src)
-                promo_piece = None
-                
-                if isinstance(piece, Pawn) and (dst[0] == 8 or dst[0] == 1):
-                    promo_piece = 'q'
-
-                snapshot = self.game._snapshot()
-                self.game.make_move(src, dst, promo_piece)
-                _, eval = self.minimax(depth - 1, "black")
-                self.game._restore_snapshot(snapshot)
-
-                if eval < min_eval:
-                    min_eval = eval
-                    best_move = (src, dst, promo_piece)
-            return best_move, min_eval
-
-    def evaluate_board(self) -> int:
-        score = 0
-        for piece in self.game.pieces:
-            value = PIECE_VALUES.get(piece.symbol.upper(), 0)
-            if piece.color == "white":
-                score += value
-            else:
-                score -= value
-        
-        # Check for game end states
-        outcome = self.game.outcome()
-        if outcome == "white wins":
-            score += 10000
-        elif outcome == "black wins":
-            score -= 10000
-        elif outcome == "stalemate":
-            score = 0
-            
-        return score
-
 if __name__ == "__main__":
     game = Game()
     gui = ChessGUI(game)
