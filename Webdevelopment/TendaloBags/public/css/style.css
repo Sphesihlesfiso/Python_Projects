@@ -31,16 +31,18 @@ footer {
   transform: scale(1.0001);
 }
 .card {
-  /* Example styles */
-  border: 2px solid  blanchedalmond; /* Bootstrap green */
+  border: 2px solid blanchedalmond;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.6s ease;
+  transition: transform 0.3s ease;
+  will-change: transform;
 }
 
 .card:hover {
-  transform: scale(1.7);
+  transform: scale(1.5);
+  z-index: 10;
   cursor: pointer;
 }
+
 .cart-wrapper {
     background-color: #f8f9fa;
     min-height: 100vh;

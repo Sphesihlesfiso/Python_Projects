@@ -41,7 +41,7 @@ app.get("/", async (req, res) => {
   try {
     const bags = await fetchBagsFromDB();
     res.render("home", { bags }); // Pass bags to your EJS or template engine
-    console.log(bags)
+    
   } catch (err) {
     res.status(500).send("Error loading products");
   } finally {
