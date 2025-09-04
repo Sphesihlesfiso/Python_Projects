@@ -26,16 +26,7 @@
   </head>
 
   <body>
-    <%- include("partials/header") %> <% const Basket = [ { name: 'Newcastle Mountains Daypack', price: 750, image: 'Newcastle_mountains.png', inStock:
-    true }, { name: 'Snow Trek Backpack', price: 900, image: 'snow.png',
-    inStock: false }, { name: 'Plan Visit Duffel', price: 799, image:
-    'planvisit.webp', inStock: true }, { name: 'Local Schools Sling', price:
-    699, image: 'schools.webp', inStock: false }, { name: 'EcoEvents Bag',
-    price: 649, image: 'events.webp', inStock: true }, { name:'Hotel Explorer Pack', price: 849, image: 'hotel.jpg', inStock: true }, { name: 'HikingTrail Bag', price: 799, image: 'hiking.jpg', inStock: false }, { name:
-    'VNLogo Pouch', price: 399, image: 'VN.png', inStock: true }, { name:
-    'Facebook Icon Bag', price: 299, image: 'facebook.svg', inStock: true }, {
-    name:'Instagram Icon Bag', price: 299, image: 'instagram.svg', inStock:
-    false }]; %>
+    <%- include("partials/header") %>
 
     <div class="cart-wrapper">
       <div class="container">
@@ -44,13 +35,12 @@
           <div class="col-lg-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h4 class="mb-0">Shopping Cart</h4>
-              <span class="text-muted"><%= Basket.length %></span>
+              <span class="text-muted"><%= bagsIncart.length %></span>
             </div>
 
             <!-- Product Cards -->
             <div class="d-flex flex-column gap-3">
-              <!-- Product 1 -->
-              <% Basket.forEach(bag => { %>
+              <% bagsIncart.forEach(bag => { %>
               <div class="product-card p-3 shadow-sm">
                 <div class="row align-items-center">
                   <div class="col-md-2">
@@ -65,61 +55,84 @@
                   </div>
                   <div class="col-md-3">
                     <div class="d-flex align-items-center gap-2">
+                      <% if (bag.available_bags>0) { %>
                       <button
                         class="quantity-btn"
-                        onclick="updateQuantity(2, -1)"
+                        onclick="updateQuantity(<%= bag.bag_id %>, -1,<%= bag.available_bags %>)"
                       >
                         -
                       </button>
                       <input
                         type="number"
+                        id="quantity-input-<%= bag.bag_id %>"
                         class="quantity-input"
                         value="1"
                         min="1"
+                        max="<%= bag.available_bags %>"
                       />
                       <button
                         class="quantity-btn"
-                        onclick="updateQuantity(2, 1)"
+                        onclick="updateQuantity(<%= bag.bag_id %>, 1,<%= bag.available_bags %>)"
                       >
                         +
                       </button>
+                      <% } else { %>
+                      <p>Out of stock</p>
+                      <% } %>
                     </div>
                   </div>
                   <div class="col-md-2">
-                    <span class="fw-bold">$<%= bag.price %></span>
+                    <span
+                      id="bag-price-<%= bag.bag_id %>"
+                      class="fw-bold"
+                      style="display: none"
+                      >R<%= bag.price %></span
+                    >
+                    <span id="total-price-<%= bag.bag_id %>" class="fw-bold"
+                      >R<%= bag.price %></span
+                    >
                   </div>
                   <div class="col-md-1">
-                    <i class="bi bi-trash remove-btn"></i>
+                    <i
+                      id="<%= bag.bag_id %>"
+                      class="bi bi-trash remove-btn"
+                      onclick="deleteItem(<%= bagsIncart %>,<%= bag.bag_id %>)"
+                    ></i>
                   </div>
                 </div>
               </div>
               <% }) %>
             </div>
-            <div class="col-lg-12 mt-2">
+          </div>
+
+          <!-- Order Summary Section -->
+          <div class="col-lg-12 mt-2">
             <div class="summary-card p-4 shadow-sm">
               <h5 class="mb-4">Order Summary</h5>
 
               <div class="d-flex justify-content-between mb-3">
                 <span class="text-muted">Subtotal</span>
-                <span>$479.97</span>
+                <span id="summary-subtotal">R0.00</span>
               </div>
               <div class="d-flex justify-content-between mb-3">
                 <span class="text-muted">Discount</span>
-                <span class="text-success">-$26.00</span>
+                <span id="summary-discount" class="text-success">-R0.00</span>
               </div>
               <div class="d-flex justify-content-between mb-3">
-                <span class="text-muted">Shipping</span>
-                <span>$5.00</span>
+                <span class="text-muted">Delivery</span>
+                <span id="summary-Delivery">R5.00</span>
               </div>
               <hr />
               <div class="d-flex justify-content-between mb-4">
                 <span class="fw-bold">Total</span>
-                <span class="fw-bold">$458.97</span>
+                <span id="summary-total" class="fw-bold">R0.00</span>
               </div>
 
-              <button class="btn btn-primary checkout-btn w-100 mb-3">
-                Proceed to Checkout
-              </button>
+              <a href="/checkout"
+                ><button class="btn btn-outline-dark w-100 mb-3">
+                  Proceed to Checkout
+                </button></a
+              >
 
               <div class="d-flex justify-content-center mx-2 my-2 gap-2">
                 <i class="bi bi-shield-check text-success"></i>
@@ -127,25 +140,79 @@
               </div>
             </div>
           </div>
-          </div>
-          
+          <!-- End Order Summary -->
         </div>
-
-      
       </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      function updateQuantity(productId, change) {
-        const input =
-          event.target.parentElement.querySelector(".quantity-input");
-        let value = parseInt(input.value) + change;
-        if (value >= 1) {
-          input.value = value;
-        }
+      function updateQuantity(id, change, cap) {
+        const quantityInput = document.getElementById(`quantity-input-${id}`);
+
+        const trashButton = document.getElementById(`trash-${id}`);
+        let quantity = parseInt(quantityInput.value);
+        const maxQuantity = cap;
+        quantity = Math.max(1, Math.min(maxQuantity, quantity + change));
+        quantityInput.value = quantity;
+
+        const priceText = document.getElementById(
+          `bag-price-${id}`
+        ).textContent;
+        const unitPrice = parseFloat(priceText.replace("R", ""));
+
+        const total = unitPrice * quantity;
+        document.getElementById(
+          `total-price-${id}`
+        ).textContent = `R${total.toFixed(2)}`;
+
+        // Recalculate order summary after updating this product
+        updateSummary();
       }
+
+      function updateSummary() {
+        let subtotal = 0;
+
+        // Loop through all product total elements
+        document.querySelectorAll(".product-card").forEach((card) => {
+          const quantityInput = card.querySelector(".quantity-input");
+          const totalEl = card.querySelector("[id^='total-price-']");
+
+          if (quantityInput && totalEl) {
+            subtotal += parseFloat(totalEl.textContent.replace("R", ""));
+          }
+        });
+
+        // Example: fixed discount of 5% if subtotal > 100
+        let discount = subtotal > 100 ? subtotal * 0.05 : 0;
+        let Delivery = subtotal > 0 ? 5.0 : 0; // free if empty cart?
+
+        let total = subtotal - discount + Delivery;
+
+        document.getElementById(
+          "summary-subtotal"
+        ).textContent = `R${subtotal.toFixed(2)}`;
+        document.getElementById(
+          "summary-discount"
+        ).textContent = `-R${discount.toFixed(2)}`;
+        document.getElementById(
+          "summary-Delivery"
+        ).textContent = `R${Delivery.toFixed(2)}`;
+        document.getElementById(
+          "summary-total"
+        ).textContent = `R${total.toFixed(2)}`;
+      }
+
+      // Run once on page load
+      function deleteItem(bagsIncart, id) {
+        const pricText = (document.getElementById(
+          `bag-price-${id}`
+        ).textContent = "D");
+        bagsIncart.filter(bag.bag_id !== id);
+      }
+      window.onload = updateSummary;
     </script>
+
     <script src="/js/main.js"></script>
   </body>
 </html>

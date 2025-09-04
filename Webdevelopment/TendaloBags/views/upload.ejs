@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>upload</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <form
+      id="upload-form"
+      class="form-section"
+      action="/upload"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <div class="form-group">
+        <label for="bag-name">Bag Name</label>
+        <input
+          type="text"
+          name="name"
+          id="bag-name"
+          class="form-input"
+          placeholder="e.g. Leather Tote"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="bag-price">Price (R)</label>
+        <input
+          type="number"
+          name="price"
+          id="bag-price"
+          class="form-input"
+          placeholder="e.g. 499.99"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="bag-alt">Alt Text</label>
+        <input
+          type="text"
+          name="alt"
+          id="bag-alt"
+          class="form-input"
+          placeholder="e.g. Brown leather tote bag"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="bag-image">Upload Image</label>
+        <input
+          type="file"
+          name="image"
+          id="bag-image"
+          class="form-input"
+          accept="image/*"
+          required
+        />
+      </div>
+
+      <button type="submit" id="upload-button" class="form-button">
+        Upload Bag
+      </button>
+    </form>
+  </body>
+</html>
