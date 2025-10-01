@@ -1,0 +1,10 @@
+.Footer-container {
+    padding-top: 10px;
+    background-color: rgb(104, 101, 101);
+    border-radius: 20px;
+    height: 50px;
+}
+.footer-text {
+    display: flex;
+    justify-content: center;
+}

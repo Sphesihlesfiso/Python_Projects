@@ -10,6 +10,7 @@ import env from "dotenv";
 import bcrypt  from "bcrypt"
 import  stripe  from "stripe"
 import crypto from "crypto";
+import path from "path"
 env.config();
 const options = {
   key: fs.readFileSync('./ssl/private.key'),
@@ -73,8 +74,9 @@ app.get("/", async (req, res) => {
     const bags = await fetchBagsFromdataBase();
 
     let bagsIncart = [];
-
+    let canAddtoCart;
     if (req.user) {
+      canAddtoCart=true;
       // ✅ User is authenticated
       console.log(`user id: ${req.user.id}`);
 
@@ -85,12 +87,13 @@ app.get("/", async (req, res) => {
 
       bagsIncart = orders_result.rows.map(row => row.bag_id);
     } else {
+      canAddtoCart=false
       // ❌ Not authenticated
       console.log("User not logged in, showing empty cart.");
     }
 
     // Render page with either cart items or empty cart
-    res.render("home", { bags, bagsIncart });
+    res.render("home", { bags, bagsIncart,canAddtoCart });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error loading products");
@@ -101,20 +104,26 @@ app.get("/", async (req, res) => {
 const storage = multer.diskStorage({
   destination: "./public/uploads/",
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
+  const originalName = path.basename(file.originalname, path.extname(file.originalname));
+  const safeName = originalName// slugify
+  "WhatsApp Image 2025-08-15 at 13.42.29_1579caeb.jpg"
+ "WhatsApp Image 2025-08-15 at 13.42.29_1579caeb.jpg"
+  const finalName = `${safeName}${path.extname(file.originalname)}`;
+  cb(null, finalName);
+}
+
 });
 const upload = multer({ storage });
 
 app.post("/upload", upload.single("image"), (req, res) => {
-  const { name, price, alt } = req.body;
-  const imageUrl = `/uploads/${req.file.filename}`;
-
+  const { name, price,available_bags } = req.body;
+  const image = `${req.file.filename}`;
+  console.log(image)
   const query = `
-    INSERT INTO pictures (name, price, alt, image_url)
+    INSERT INTO pictures (name, price, image,available_bags )
     VALUES ($1, $2, $3, $4)
   `;
-  const values = [name, price, alt, imageUrl];
+  const values = [name, price,image,available_bags];
 
   dataBase.query(query, values, (err) => {
     if (err) {

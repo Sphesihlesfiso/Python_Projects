@@ -1,24 +1,16 @@
 import React from "react";
 import SectionItem from "./Sections";
-import {
-  House,
-  PersonWorkspace,
-  Award,
-  Wrench,
-  EnvelopeFill,
-  FilePerson
-} from "react-bootstrap-icons";
 
 function Header() {
   return (
-    <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-      <SectionItem name="Home" svg={House} />
-      <SectionItem name="Projects" svg={PersonWorkspace} />
-      <SectionItem name="Skills" svg={Award} />
-      <SectionItem name="Tools" svg={Wrench} />
-      <SectionItem name="Contact" svg={EnvelopeFill} />
-      <SectionItem name="Resume" svg={FilePerson} />
+    <header>
+    <div style={{ display: "flex", alignItems: "center",justifyItems:"center",justifyContent:"space-around",borderRadius:"10px"}}>
+      <SectionItem name="Home" />
+      <SectionItem name="Projects" />
+      <SectionItem name="Skills" />
+      <SectionItem name="Contact" />
     </div>
+    </header>
   );
 }
 

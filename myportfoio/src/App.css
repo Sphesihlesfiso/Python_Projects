@@ -6,6 +6,44 @@ footer {
   text-align: center;
   margin: 0px;
   padding: 3px;
-  background-color: burlywood;
+  background-color:  rgb(178, 218, 219);
   border-radius: 15px;
 }
+header {
+  background-color: rgb(178, 218, 219);
+  border-radius: 10px;
+}
+.HeaderItems {
+  
+  border-radius: 15px;
+}
+.HeaderItems :hover {
+  background-color: white;
+  border-radius: 15px;
+}
+.Introduction {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  background-color: bisque;
+  border-radius: 15px;
+}
+#SphesihlePicture {
+
+  display: flex;
+ 
+  margin: 15px;
+  border: 10px black solid;
+  border-radius: 50%;
+  height: 200px;
+  width: 200px;
+  
+}
+body {
+  display: block;
+  background-color: black;
+
+}
+

@@ -1,0 +1,9 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 50px !important;
+    min-height: 670px;
+    background-image: url("../../assets/fonts/bg.jpg");
+
+}

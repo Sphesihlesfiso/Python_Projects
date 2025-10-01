@@ -1,0 +1,27 @@
+.About-container {
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    
+    
+}
+
+.Skills-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+.Skill {
+  background-color: #e0e0e0;
+  padding: 8px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.paragraph {
+    text-align: center;
+}
+
+
