@@ -1,27 +1,89 @@
 .About-container {
-    background-color: whitesmoke;
-    display: flex;
-    flex-direction: column;
-    
-    
+  min-height: 100vh;               /* full screen height */
+  width: 100%;
+  background-color: #0d0d0d;       /* dark background */
+  color: #f5f5f5;                  /* soft white text */
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 10%;
+  box-sizing: border-box;
 }
 
-.Skills-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 10px;
-  padding: 0;
-  list-style: none;
+.About-content {
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
 }
-.Skill {
-  background-color: #e0e0e0;
-  padding: 8px;
-  border-radius: 5px;
+
+.Heading {
+  font-size: 2.4rem;
+  color: #00bcd4;                  /* accent color */
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   text-align: center;
 }
 
-.paragraph {
-    text-align: center;
+.Paragraph-name {
+  font-size: 1.8rem;
+  color: #f5f5f5;
+  margin-bottom: 5px;
 }
 
+.paragraph {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #ccc;
+}
 
+.ending {
+  font-size: 1.6rem;
+  color: #00bcd4;
+  margin-top: 20px;
+}
+
+.Skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 10px;
+  list-style: none;
+  padding: 0;
+}
+
+.Skill {
+  background-color: #1a1a1a;
+  color: #00bcd4;
+  padding: 8px 15px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.Skill:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 188, 212, 0.4);
+}
+
+/* Responsive layout for mobile */
+@media (max-width: 768px) {
+  .Heading {
+    font-size: 2rem;
+  }
+
+  .Paragraph-name {
+    font-size: 1.5rem;
+  }
+
+  .paragraph {
+    font-size: 0.95rem;
+  }
+
+  .Skills-container {
+    justify-content: center;
+  }
+}

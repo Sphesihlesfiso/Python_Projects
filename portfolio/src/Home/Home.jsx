@@ -1,41 +1,52 @@
-import React from 'react'
+import React from 'react';
 import Typewriter from 'typewriter-effect';
-import "./Home.css"
+import './Home.css';
+
 export default function Home() {
   return (
     <div className='Home-container'>
-        <div className='Picture-paragraph'>
-            <div className='Picture'>
-                <img className="Home-img" src="/logo512.png" alt="Sphesihle Mabaso"></img>
-
-            </div>
-            <div className='Text'>
-                <h3>Hi I'm  <span className='Highlighted-text'> Sphesihle Mabaso </span> I'm a </h3> 
-
-                <p1 className='Home-paragraph'>
-                      <Typewriter
-                            options={{
-                            strings: ['Aspiring Software Engineer', 'Problem Solver', 'Team Player', ],
-                            autoStart: true,
-                            loop: true,
-                            }}
-                        />
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit vero rem voluptate, eaque voluptatem saepe
-                        , optio deleniti, praesentium nam enim distinctio nesciunt neque illo odio! Dolorum ipsam a quae adipisci?
-                    </p>
-                </p1>
-
-            </div>
+      <div className='Picture-paragraph'>
+        <div className='Picture'>
+          <img className="Home-img" src="/My Photo.jpg" alt="Sphesihle Mabaso" />
         </div>
-        <div className='Buttons'>
-        <a href="/Sphesihle Mabaso.pdf" download="/Sphesihle Mabaso.pdf"><button >
-            Get Resume
-        </button></a>
-        <button>
-            Contact Me
-        </button>
+
+        <div className='Text'>
+          <h3>
+            Hi, I'm <span className='Highlighted-text'>Sphesihle Mabaso</span> a
+          </h3>
+
+          <div className='Home-paragraph'>
+            <Typewriter
+              options={{
+                strings: [
+                  'Software Engineer in training',
+                  'Problem Solver',
+                  'Team Player',
+                  'Full-Stack Developer'
+                ],
+                autoStart: true,
+                loop: true,
+              }}
+            />
+          </div>
+
+          <p className='Home-paragraph'>
+            I’m passionate about building secure, scalable web and mobile applications that solve real-world problems. Whether it’s designing responsive dashboards, integrating powerful backends, or refining git workflows I thrive on clean architecture and iterative improvement.
+          </p>
+
+         
         </div>
+      </div>
+
+      <div className='Buttons'>
+        <a href="/Sphesihle Mabaso.pdf" download>
+          <button>Get Resume</button>
+        </a>
+        <a href="#contact">
+          <button>Contact Me</button>
+        </a>
+      </div>
     </div>
-  )
+  );
 }
+
