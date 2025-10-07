@@ -31,7 +31,7 @@ export default function Home() {
           </div>
 
           <p className='Home-paragraph'>
-            I’m passionate about building secure, scalable web and mobile applications that solve real-world problems. Whether it’s designing responsive dashboards, integrating powerful backends, or refining git workflows I thrive on clean architecture and iterative improvement.
+            I’m passionate about building secure, scalable web applications and websites that solve real-world problems. Whether you want a buisness or Personal website you've found  the right person for the job.
           </p>
 
          

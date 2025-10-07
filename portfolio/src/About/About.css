@@ -45,7 +45,7 @@
   margin-top: 20px;
 }
 
-.Skills-container {
+.Skills-container,.Tool-container {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
@@ -54,7 +54,7 @@
   padding: 0;
 }
 
-.Skill {
+.Skill,.Tool {
   background-color: #1a1a1a;
   color: #00bcd4;
   padding: 8px 15px;
@@ -65,6 +65,10 @@
 }
 
 .Skill:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 188, 212, 0.4);
+}
+.Tool:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 15px rgba(0, 188, 212, 0.4);
 }
@@ -83,7 +87,7 @@
     font-size: 0.95rem;
   }
 
-  .Skills-container {
+  .Skills-container,.Tool-container {
     justify-content: center;
   }
 }

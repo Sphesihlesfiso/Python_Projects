@@ -33,6 +33,20 @@ export default function About() {
         <li className='Skill'>Git</li>
         <li className='Skill'>GitHub</li>
       </ul>
+      <h3 className='ending'>Tools</h3>
+          <ul className='Tool-container'>
+            <li className='Tool'>VS Code</li>
+            <li className='Tool'>Postman</li>
+            <li className='Tool'>GitHub Desktop</li>
+            <li className='Tool'>Figma</li>
+            <li className='Tool'>Supabase Studio</li>
+            <li className='Tool'>Chrome DevTools</li>
+            <li className='Tool'>IntelliJ IDEA</li>
+            <li className='Tool'>Netlify</li>
+            <li className='Tool'>Vercel</li>
+          </ul>
+
+
     </div>
     </div>
   );
