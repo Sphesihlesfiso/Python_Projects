@@ -41,22 +41,13 @@
               </div>
               <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                 <div class="text-center">
-                  <% if (!bagsIncart.includes(bag.bag_id) && canAddtoCart) { %>
+                   <% if (!bagsIncart.includes(bag.bag_id)) { %>
                   <button
                     id="<%= bag.bag_id %>"
                     class="btn btn-outline-dark mt-auto"
                   >
                     Add to cart
                   </button>
-                  <% } else if (!canAddtoCart) { %>
-                  <a href="/login">
-                    <button
-                      id="<%= bag.bag_id %>"
-                      class="btn btn-outline-dark mt-1"
-                    >
-                      Add to cart
-                    </button></a
-                  >
                   <% } else { %>
                   <button id="<%= bag.bag_id %>" class="btn btn-outline-dark">
                     In Cart
