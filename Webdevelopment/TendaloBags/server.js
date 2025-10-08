@@ -33,8 +33,8 @@ app.use(
   session({
     secret: process.env.key,
     resave: false,
-    saveUninitialized: true,
-    cookie:{ secure:true,
+    saveUninitialized: false,
+    cookie:{ secure:false,
       maxAge:1000*60*60*24*5
     }
   })
@@ -250,13 +250,13 @@ app.get("/checkout", (req, res) => {
   const paymentData = {
   merchant_id: "10000100",
   merchant_key: "46f0cd694581a",
-  return_url: "https://547cfb2939e8.ngrok-free.app/",
+  return_url: "https://d0df5321a769.ngrok-free.app",
   cancel_url: "https://547cfb2939e8.ngrok-free.app/cart",
   notify_url: "https://547cfb2939e8.ngrok-free.app/about",
   name_first: "John",
   name_last: "Doe",
   email_address: "mabasosphesihle25@gmail.com",
-  amount: "2.00", // R50
+  amount: "20500", // R50
   item_name: "Test Product",
 };
 
@@ -315,9 +315,7 @@ app.get('/login', (req, res) => {
     res.render("login")
 });
 
-app.get('/logout', (req, res) => {
-  res.render('home');
-});
+
 app.get('/register', (req, res) => {
   res.render('register');
 });
@@ -345,11 +343,6 @@ app.get('/cart',async (req, res) => {
 });
 app.post('/register', (req, res) => {
   res.render('register');
-});
-
-
-app.get('/login/register', (req, res) => {
-  res.render("joter")
 });
 
 https.createServer(options, app).listen(port, () => {
