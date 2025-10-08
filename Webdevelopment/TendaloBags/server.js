@@ -143,10 +143,15 @@ app.get("/logout", (req, res) => {
 
 app.get("/account", (req, res) => {
   
-  if (req.isAuthenticated()) {
-    res.render("account");
+  if (req.isAuthenticated() && req.user.user_id===7) {
+    res.render("upload");
     
-  } else {
+  } else if (req.isAuthenticated() ){
+    res.render("account")
+  }
+  
+  
+  else {
     res.redirect("/login");
   }
 });
@@ -296,13 +301,19 @@ app.post("/addBag", async (req, res) => {
 });
 
 app.get('/upload',async (req, res) => {
-  res.render('upload');
+  if (user.user_id===7){
+    res.render('upload');
+
+  } else {
+      res.render('account');
+  }
+
 });
 app.get('/about',async (req, res) => {
   res.render('about');
 });
 app.get('/login', (req, res) => {
-  if (req.isAuthenticated()){ 
+  if (req.isAuthenticated() && user.user_id){ 
     res.render("account");
   } else {
     res.render("login");}
@@ -340,17 +351,11 @@ app.post('/register', (req, res) => {
   res.render('register');
 });
 
-app.get('/admin', (req, res) => {
-  res.render("admindashboard")
-});
+
 app.get('/login/register', (req, res) => {
   res.render("joter")
 });
-app.post('/admin', (req, res) => {
-  const nameofBag=req.body["Nameofbag"]
-  console.log(nameofBag)
-  res.render("admindashboard")
-});
+
 https.createServer(options, app).listen(port, () => {
   console.log(`Secure server running on https://localhost ${port}`);
 });
