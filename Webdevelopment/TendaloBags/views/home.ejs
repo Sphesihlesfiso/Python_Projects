@@ -24,32 +24,32 @@
         <div
           class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
         >
-          <% bags.forEach(bag => { %>
-
+          <% cars.forEach(car => { %>
+            <%console.log(car.image)%>
           <div class="col mb-5">
             <div class="card h-100">
               <img
                 class="card-img-top img-fluid h-100 object-fit-cover"
-                src="/images/<%= bag.image %>"
-                alt="<%= bag.name %>"
+                src="/images/<%= car.image %>"
+                alt="<%= car.name %>"
               />
               <div class="card-body p-1">
                 <div class="text-center">
-                  <h5><%= bag.name %></h5>
-                  <h5>R<%= bag.price %></h5>
+                  <h5><%= car.name %></h5>
+                  <h5>R<%= car.price %></h5>
                 </div>
               </div>
               <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                 <div class="text-center">
-                   <% if (!bagsIncart.includes(bag.bag_id)) { %>
+                   <% if (!bagsIncart.includes(car.bag_id)) { %>
                   <button
-                    id="<%= bag.bag_id %>"
+                    id="<%= car.bag_id %>"
                     class="btn btn-outline-dark mt-auto"
                   >
                     Add to cart
                   </button>
                   <% } else { %>
-                  <button id="<%= bag.bag_id %>" class="btn btn-outline-dark">
+                  <button id="<%= car.bag_id %>" class="btn btn-outline-dark">
                     In Cart
                   </button>
                   <% } %>

@@ -8,8 +8,11 @@ import { Strategy } from "passport-local";
 import session from "express-session";
 import env from "dotenv";
 import bcrypt  from "bcrypt"
-import  stripe  from "stripe"
+
 import crypto from "crypto";
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 env.config();
 const options = {
   key: fs.readFileSync('./ssl/private.key'),
@@ -19,6 +22,8 @@ const options = {
 const app = express();
 const port = process.env.port;
 app.use(express.static("public"));
+app.use('/uploads', express.static('public/uploads'));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.set('view engine', 'ejs');
@@ -70,12 +75,12 @@ app.get("/", async (req, res) => {
     console.log("INNNNNNNNNNNNNNNNNNNN");
 
     // Fetch all bags (available products)
-    const bags = await fetchBagsFromdataBase();
+    const cars = await fetchBagsFromdataBase();
 
     let bagsIncart = [];
 
     if (req.user) {
-      // ✅ User is authenticated
+      
       console.log(`user id: ${req.user.id}`);
 
       const orders_result = await dataBase.query(
@@ -85,12 +90,12 @@ app.get("/", async (req, res) => {
 
       bagsIncart = orders_result.rows.map(row => row.bag_id);
     } else {
-      // ❌ Not authenticated
+      
       console.log("User not logged in, showing empty cart.");
     }
 
     // Render page with either cart items or empty cart
-    res.render("home", { bags, bagsIncart });
+    res.render("home", { cars, bagsIncart });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error loading products");
@@ -101,20 +106,21 @@ app.get("/", async (req, res) => {
 const storage = multer.diskStorage({
   destination: "./public/uploads/",
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, file.originalname);
   },
 });
 const upload = multer({ storage });
 
 app.post("/upload", upload.single("image"), (req, res) => {
-  const { name, price, alt } = req.body;
-  const imageUrl = `/uploads/${req.file.filename}`;
+  const { name, price, available_bags } = req.body;
+  const image = req.file.filename;
 
+ 
   const query = `
-    INSERT INTO pictures (name, price, alt, image_url)
+    INSERT INTO pictures (name,price,image,available_bags)
     VALUES ($1, $2, $3, $4)
   `;
-  const values = [name, price, alt, imageUrl];
+  const values = [name, price,image,available_bags];
 
   dataBase.query(query, values, (err) => {
     if (err) {

@@ -21,13 +21,13 @@
       enctype="multipart/form-data"
     >
       <div class="form-group">
-        <label for="bag-name">Bag Name</label>
+        <label for="bag-name">Car Name</label>
         <input
           type="text"
           name="name"
           id="bag-name"
           class="form-input"
-          placeholder="e.g. Leather Tote"
+          placeholder="e.g. BMW"
           required
         />
       </div>
@@ -39,21 +39,26 @@
           name="price"
           id="bag-price"
           class="form-input"
-          placeholder="e.g. 499.99"
+          placeholder="e.g. 49999.99"
           required
         />
       </div>
 
+    
+      </div>
       <div class="form-group">
-        <label for="bag-alt">Alt Text</label>
+        <label for="bag-price">Available Cars</label>
         <input
-          type="text"
-          name="alt"
-          id="bag-alt"
+          type="number"
+          name="available_bags"
+          id="bag-price"
           class="form-input"
-          placeholder="e.g. Brown leather tote bag"
+          placeholder="e.g.5"
           required
         />
+      </div>
+
+    
       </div>
 
       <div class="form-group">
@@ -69,7 +74,7 @@
       </div>
 
       <button type="submit" id="upload-button" class="form-button">
-        Upload Bag
+        Upload Car
       </button>
     </form>
   </body>
