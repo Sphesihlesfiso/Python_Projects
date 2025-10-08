@@ -8,7 +8,6 @@ import { Strategy } from "passport-local";
 import session from "express-session";
 import env from "dotenv";
 import bcrypt  from "bcrypt"
-
 import crypto from "crypto";
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -18,7 +17,6 @@ const options = {
   key: fs.readFileSync('./ssl/private.key'),
   cert: fs.readFileSync('./ssl/certificate.crt')
 };
-
 const app = express();
 const port = process.env.port;
 app.use(express.static("public"));
@@ -36,7 +34,7 @@ app.use(
     secret: process.env.key,
     resave: false,
     saveUninitialized: true,
-    cookie:{ secure:false,
+    cookie:{ secure:true,
       maxAge:1000*60*60*24*5
     }
   })
@@ -142,24 +140,27 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/account", (req, res) => {
-  
-  if (req.isAuthenticated() && req.user.user_id===7) {
-    res.render("upload");
-    
-  } else if (req.isAuthenticated() ){
-    res.render("account")
-  }
-  
-  
-  else {
-    res.redirect("/login");
+  if (req.isAuthenticated() && req.user) {
+    console.log(`User inside: ${req.user.id}`);
+
+    if (req.user.id === 7) {
+      console.log("admin");
+      return res.render("upload");
+    } else {
+      console.log("non admin");
+      return res.render("account");
+    }
+  } else {
+    console.log("not authenticated");
+    return res.redirect("/login");
   }
 });
 
-app.post(
-  "/login",
+
+app.post("/login",
   passport.authenticate("local", {
-    successRedirect: "/account",
+    
+    successRedirect: "/account" ,
     failureRedirect: "/login",
   })
 );
@@ -301,22 +302,17 @@ app.post("/addBag", async (req, res) => {
 });
 
 app.get('/upload',async (req, res) => {
-  if (user.user_id===7){
     res.render('upload');
 
-  } else {
-      res.render('account');
-  }
+  
 
 });
 app.get('/about',async (req, res) => {
   res.render('about');
 });
 app.get('/login', (req, res) => {
-  if (req.isAuthenticated() && user.user_id){ 
-    res.render("account");
-  } else {
-    res.render("login");}
+  
+    res.render("login")
 });
 
 app.get('/logout', (req, res) => {
