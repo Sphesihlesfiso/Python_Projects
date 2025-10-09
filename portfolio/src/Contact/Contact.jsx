@@ -1,33 +1,38 @@
-import React, { useRef } from 'react';
+import React, { useRef ,useState} from 'react';
 import emailjs from '@emailjs/browser';
 import './Contact.css';
 
 
 export default function Contact() {
+    const [messageSent,setMessageSent]=useState(false)
+    const [sendFailed,setsendFailed]=useState(false)
+    const sent='Message sent';
+    const notSent='Send message';
+    
+
     const form = useRef();
 
     const sendEmail = (e) => {
     e.preventDefault();
       emailjs.sendForm(
-  process.env.REACT_APP_EMAILJS_SERVICE_ID,
-  process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
-  form.current,
-  process.env.REACT_APP_EMAILJS_PUBLIC_KEY
-)
+      process.env.REACT_APP_EMAILJS_SERVICE_ID,
+      process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+      form.current,
+      process.env.REACT_APP_EMAILJS_PUBLIC_KEY
+    )
 
     
-.then(
-        () => {
-        alert('Message sent successfully!');
-        form.current.reset();
-        },
-        (error) => {
-        alert('Failed to send message. Please try again.');
-        console.error("email.js error ",error);
-        console.log(form.current);
+    .then(
+            () => {setMessageSent(!false)
+            
 
-        }
-    );
+            form.current.reset();
+            },
+            (error) => {
+              setsendFailed(!false)
+
+            }
+        );
     };
 
   return (
@@ -40,7 +45,7 @@ export default function Contact() {
             <input type="email" name="user_email" placeholder="Your Email" required />
             <input type="text" name="subject" placeholder="Subject" required />
             <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-            <button type="submit">Send Message</button>
+            {sendFailed ?<button type="submit">Failed to send message</button>:<button type="submit">{messageSent ?sent:notSent }</button>}
         </form>
 
 
