@@ -8,7 +8,7 @@
   flex-direction: column;
   justify-content: center; /* center content vertically */
   align-items: center; /* center horizontally */
-  padding: 60px 8%;
+  padding: 3% 5.3%;
   box-sizing: border-box;
 }
 
@@ -31,7 +31,7 @@
 
 @media (max-width: 900px) {
   .Projects-container {
-    padding: 40px 5%;
+    padding: 0 8%;
   }
 
   .title {

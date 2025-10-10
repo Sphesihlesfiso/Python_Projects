@@ -69,9 +69,9 @@
 
   .Header-nav {
     position: absolute;
-    top: 65px;
+    top: 90px;
     right: 0;
-    width: 20%;
+    width: 30%;
     height: 40vh; /* 40% of viewport height */
     background-color: #121212;           /* dark dropdown */
     flex-direction: column;

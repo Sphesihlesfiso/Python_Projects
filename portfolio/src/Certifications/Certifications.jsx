@@ -1,4 +1,4 @@
-import {React,useState} from 'react'
+import {React} from 'react'
 import "./Certifications.css"
 import CertificationsArray from '../assets/CertificationsArray'
 import CertificateCard from '../assets/CertificateCard'
@@ -6,7 +6,7 @@ import CertificateCard from '../assets/CertificateCard'
 export default function Certifications() {
   return (
     <div className='Certifications' id='certifications'>
-        <h1 className='title'>
+        <h1 style={{textAlign:'center'}} className='title'>
            Certificates
         </h1>
         <ul className='Certifications-container'>

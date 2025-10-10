@@ -7,7 +7,7 @@ export default function About() {
         <div className="About-content">
       <h1 className='Heading'>About Me</h1>
 
-      <h2 className='Paragraph-name'>Who am I?</h2>
+      <h2 className='Paragraph-name' style={{textAlign:"center"}}>Who am I?</h2>
       <p className='paragraph'>
         I'm Sphesihle Mabaso  a resilient, methodical builder with a passion for crafting secure, scalable web and mobile applications. I thrive on solving real-world problems through clean architecture, responsive design, and thoughtful backend integration.
       </p>
@@ -15,7 +15,7 @@ export default function About() {
         My workflow is rooted in iterative improvement and professional code practices. Whether I’m refining React dashboards, managing PostgreSQL databases, or troubleshooting git branches, I bring precision and purpose to every project.
       </p>
 
-      <h3 className='ending'>My Skills</h3>
+      <h3 className='ending' style={{textAlign:"center"}}>My Skills</h3>
       <ul className='Skills-container'>
         <li className='Skill'>HTML</li>
         <li className='Skill'>CSS</li>
@@ -33,7 +33,7 @@ export default function About() {
         <li className='Skill'>Git</li>
         <li className='Skill'>GitHub</li>
       </ul>
-      <h3 className='ending'>Tools</h3>
+      <h3 className='ending' style={{textAlign:"center"}}>Tools</h3>
           <ul className='Tool-container'>
             <li className='Tool'>VS Code</li>
             <li className='Tool'>Postman</li>

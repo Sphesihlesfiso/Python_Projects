@@ -1,18 +1,18 @@
 .About-container {
   min-height: 100vh;               /* full screen height */
   width: 100%;
+  
   background-color: #0d0d0d;       /* dark background */
   color: #f5f5f5;                  /* soft white text */
   font-family: 'Poppins', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 10%;
+  padding: 35px 5%;
   box-sizing: border-box;
 }
 
 .About-content {
-  max-width: 900px;
   display: flex;
   flex-direction: column;
   gap: 0px;
@@ -77,10 +77,15 @@
 @media (max-width: 768px) {
   .Heading {
     font-size: 2rem;
+    padding: 0;
+  }
+  .About-container{
+    padding: 0 6%;
   }
 
   .Paragraph-name {
     font-size: 1.5rem;
+    padding: 0;
   }
 
   .paragraph {
@@ -89,5 +94,10 @@
 
   .Skills-container,.Tool-container {
     justify-content: center;
+  }
+  .ending {
+    font-size: 1.6rem;
+    color: #00bcd4;
+    margin-top: 0px
   }
 }

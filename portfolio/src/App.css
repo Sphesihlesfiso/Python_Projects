@@ -62,7 +62,7 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  
   background-color:  #0d0d0d; /* slightly lighter dark for contrast */
 }
 
