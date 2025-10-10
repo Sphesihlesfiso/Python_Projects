@@ -1,0 +1,29 @@
+.Certificate-container {
+  background-color: #1a1a1a;       /* dark card */
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 188, 212, 0.1);
+  display: block;
+  text-align: center;
+  gap: 3px;
+  font-size: 1.1rem;
+  cursor: default;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+
+.Certificate i {
+  font-size: 1.5rem;
+  color: #00bcd4;                  /* icon color matches accent */
+  transition: transform 0.3s ease;
+  height: 50%;
+}
+
+.Certificate:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 188, 212, 0.3);
+  color: #00e5ff;
+}
+
+.Certificate:hover i {
+  transform: scale(1.3);
+}
