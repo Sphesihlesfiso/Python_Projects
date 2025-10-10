@@ -29,6 +29,12 @@ const CertificationsArray = [
     image: '<i class="bi bi-journal-code"></i>',
     completed: "70",
     teacher: "Angela Yu"
+  },
+  {
+    name: "LLm Engineering Bootcamp",
+    image: '<i class="bi bi-journal-code"></i>',
+    completed: "5",
+    teacher: "Ed Donner"
   } 
 ];
 export default CertificationsArray

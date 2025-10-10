@@ -1,0 +1,51 @@
+<project>
+  <title>Smart Service Booking Platform</title>
+  <summary>
+    A full-stack web application that allows users to browse, book, and manage service appointments—ideal for car detailing, tutoring, or Sphesihle Cars test drives.
+  </summary>
+
+  <techStack>
+    <frontend>
+      <framework>React</framework>
+      <templating>EJS</templating>
+      <styling>CSS / Bootstrap</styling>
+    </frontend>
+    <backend>
+      <language>Java</language>
+      <framework>Spring Boot</framework>
+      <altBackend>Node.js + Express</altBackend>
+    </backend>
+    <database>
+      <primary>PostgreSQL</primary>
+      <realtime>Supabase</realtime>
+    </database>
+    <security>
+      <auth>JWT</auth>
+      <passwordHashing>bcrypt</passwordHashing>
+      <envManagement>.env files</envManagement>
+    </security>
+    <extras>
+      <emailIntegration>EmailJS</emailIntegration>
+      <deployment>Netlify / Vercel / Render</deployment>
+    </extras>
+  </techStack>
+
+  <features>
+    <feature>Service listing with dynamic filtering</feature>
+    <feature>Booking calendar with availability slots</feature>
+    <feature>User authentication and profile management</feature>
+    <feature>Admin dashboard for service providers</feature>
+    <feature>Email confirmations with branded templates</feature>
+    <feature>Ratings and reviews</feature>
+    <feature>Responsive design for mobile and desktop</feature>
+  </features>
+
+  <benefits>
+    <benefit>Demonstrates full-stack integration</benefit>
+    <benefit>Solves a real-world scheduling problem</benefit>
+    <benefit>Highlights security and user experience</benefit>
+    <benefit>Easy to demo and expand</benefit>
+  </benefits>
+
+  <status>Conceptualized — ready for sprint planning</status>
+</project>
