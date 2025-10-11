@@ -1,36 +1,26 @@
 const Projects_array=[
   {
-    "title": "Weather Website",
-    "description": "A responsive weather app that fetches real-time data using the OpenWeather API and displays forecasts with clean UI components.",
-    "techStack": ["React", "CSS", "API Integration"],
-    "link": "https://github.com/sphesihle/weather-app",
-    "image":"/weather-app.webp"
+    "title": "Portfolio Website",
+    "description": "A professional developer portfolio built with React and modular CSS, showcasing clean UI components , responsive design and a dynamic contact form powered by EmailJS for real-time client communication.",
+    "techStack": ["React", "CSS","GitHub Pages"],  
+    "image":"/Screenshot 2025-10-11 033500.png"
   },
   {
     "title": "E-commerce Web App",
-    "description": "A full-stack shopping platform with user authentication, product filtering, and secure checkout using JWT and bcrypt.",
-    "techStack": ["Node.js", "Express", "React", "PostgreSQL", "JWT", "bcrypt"],
-    "link": "https://github.com/sphesihle/ecommerce-app",
-    "image":"/weather-app.webp"
+    "description": "A full-stack shopping platform with user authentication, Admin Dashboard,Payment System(Payfast) and secure checkout using JWT and bcrypt.",
+    "techStack": ["Html","Css","Java Script","Node.js", "Express", "React", "PostgreSQL", "JWT", "bcrypt"],
+    "image":"/Sphesihle Cars.png",
+    "video": "/Full Demo of Sphesihle Cars.mp4",
+
   },
   {
-    "title": "Task Manager Dashboard",
-    "description": "A modular dashboard for managing tasks with CRUD operations, dynamic filtering, and Supabase backend integration.",
-    "techStack": ["React", "Supabase", "CSS Modules", "Git"],
-    "link": "https://github.com/sphesihle/task-dashboard",
-    "image":"/weather-app.webp"
-  },
-  {
-    "title": "Portfolio Website",
-    "description": "A personal portfolio showcasing projects, skills, and contact info with smooth navigation and responsive design.",
-    "techStack": ["React", "EJS Templating", "CSS", "GitHub Pages"],
-    "link": "https://github.com/sphesihle/portfolio-site"
-  },
-  {
-    "title": "Spring Boot API",
-    "description": "A secure RESTful API built with Spring Boot for managing user data, including authentication and role-based access.",
-    "techStack": ["Java", "Spring Boot", "PostgreSQL", "JWT"],
-    "link": "https://github.com/sphesihle/spring-api"
+    "title": "Tick Tack",
+    "description": "The Famous Tick Tack Game AKA (X,O)",
+    "techStack": ["Python"],
+
+    "image":"/Tick Tack  Game.png",
+    "video":"/Ticktack backend.mp4"
+
   }
 ]
 export default Projects_array

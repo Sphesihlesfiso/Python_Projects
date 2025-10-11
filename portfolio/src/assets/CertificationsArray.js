@@ -13,6 +13,18 @@ const CertificationsArray = [
     teacher: "StellenBosch univercity"
   },
   {
+    name: "Oracle Ai Foundations",
+    image: '<i class="bi bi-journal-code"></i>',
+    completed: "80",
+    teacher: "Oracle Univercity"
+  },
+   {
+    name: "Full Stack Web Development Bootcammp",
+    image: '<i class="bi bi-journal-code"></i>',
+    completed: "70",
+    teacher: "Angela Yu"
+  },
+  {
     name: "Java Bootcammp",
     image: '<i class="bi bi-journal-code"></i>',
     completed: "45",
@@ -25,16 +37,10 @@ const CertificationsArray = [
     teacher: "Angela Yu"
   },
   {
-    name: "Full Stack Web Development Bootcammp",
-    image: '<i class="bi bi-journal-code"></i>',
-    completed: "70",
-    teacher: "Angela Yu"
-  },
-  {
     name: "LLm Engineering Bootcamp",
     image: '<i class="bi bi-journal-code"></i>',
     completed: "5",
     teacher: "Ed Donner"
-  } 
+  }
 ];
 export default CertificationsArray

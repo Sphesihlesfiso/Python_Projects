@@ -39,7 +39,7 @@ export default function Home() {
       </div>
 
       <div className='Buttons'>
-        <a href="/Sphesihle Mabaso.pdf" download>
+        <a href="/Sphesihle_Mabaso_ATS_Friendly_CV.docx" download>
           <button>Get Resume</button>
         </a>
         <a href="#contact">

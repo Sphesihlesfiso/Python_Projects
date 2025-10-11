@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './Header.css';
+import useActiveSection from './ActiveSection'; // adjust path as needed
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const activeSection = useActiveSection();
 
   return (
     <header className="Header-container">
@@ -14,15 +16,19 @@ export default function Header() {
 
       <nav className={`Header-nav ${isOpen ? 'open' : ''}`}>
         <ul className="Header-List-container">
-        <li><a href="#home" className="Header-list-item">Home</a></li>
-        <li><a href="#about" className="Header-list-item">About Me</a></li>
-        <li><a href="#services" className="Header-list-item">Services</a></li>
-        <li><a href="#certifications" className="Header-list-item">Certificates</a></li>
-        <li><a href="#projects" className="Header-list-item">Projects</a></li>
-        <li><a href="#contact" className="Header-list-item">Contact</a></li>
+          {['home', 'about', 'services', 'certifications', 'projects', 'contact'].map((section) => (
+            <li key={section}>
+              <a
+                href={`#${section}`}
+                className={`Header-list-item ${activeSection === section ? 'active' : ''}`}
+              >
+                {section.charAt(0).toUpperCase() + section.slice(1).replace('-', ' ')}
+              </a>
+            </li>
+          ))}
         </ul>
-
       </nav>
     </header>
   );
 }
+

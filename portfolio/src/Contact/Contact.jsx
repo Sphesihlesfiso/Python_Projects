@@ -55,6 +55,7 @@ export default function Contact() {
           <p><i className="bi bi-envelope-fill"></i> <strong>Email:</strong> <a href="mailto:mabasosphesihle25@gmail.com">mabasosphesihle25@gmail.com</a></p>
           <p><i className="bi bi-geo-alt-fill"></i> <strong>Location:</strong> Cape Town, Stellenbosch</p>
           <p><i className="bi bi-telephone-fill"></i> <strong>Phone:</strong> <a href="tel:+27638133387">063 813 3387</a></p>
+          <p><i className="bi bi-github"></i> <strong>Email:</strong> <a href="https://github.com/Sphesihlesfiso">Sphesihlesfiso</a></p>
         </div>
       </div>
     </div>
